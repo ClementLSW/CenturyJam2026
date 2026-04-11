@@ -101,14 +101,13 @@ For more information on how these are named refer to [Unicode Braille](https://w
 - **Inter-Round:** The next truck arrives immediately after departure. A brief per-round score recap is shown during the transition.
  
 ##### Dev Context
-- **Timer:** The round timer is server-authoritative in online play. Local timers sync periodically to correct drift.
 - **End Trigger State Machine:** Two valid end states — `TIMER_EXPIRED` and `EARLY_DISPATCH`. Both routes must produce identical downstream behavior (scoring, truck departure animation, inter-round transition).
-- **Score Snapshot:** Grid state and color ownership data must be snapshotted at the moment of dispatch for scoring; any placements in-flight at dispatch time are discarded.
+- **Score Snapshot:** No further actions are allowed once dispatch is triggered. Score is calculated based on the exact state of the grid on dispatch trigger.
+- **Inter-Round Transition:** Each player’s conveyor belt also has a counter displaying their scores. This score is updated during the transition.
  
 ##### Art Context
 - **Timer Display:** Prominent, always visible. Should enter a visual urgency state (e.g., color change, pulse) at ≤ 10 seconds remaining.
-- **Truck Departure:** Two animation variants — normal departure (neutral) and early dispatch (celebratory). Refer to §6.3.
-- **Inter-Round Transition:** Score recap overlay displayed over the outgoing/incoming truck transition.
+- **Truck Departure:** An animated warning sign/scroller appears from the top of the frame to indicate clearly when the truck is departing. //Refer to §6.3. [To Remove §6.3 if not relevant]
  
 ### 2.6 Early Dispatch System
  
@@ -120,13 +119,12 @@ For more information on how these are named refer to [Unicode Braille](https://w
  
 ##### Dev Context
 - **Dispatch State:** Maintain a per-player boolean `isHolding`. Early dispatch fires when all 4 are `true` simultaneously.
-- **Hold Threshold:** Determine minimum hold duration before the dispatch is considered confirmed (e.g., 0.5 s) to prevent accidental triggers. TBD via playtesting.
-- **Disconnect Edge Case:** If a player disconnects while the dispatch vote is active, decide whether their slot is treated as permanently `true` or permanently `false` for the remainder of the round. TBD.
+- **Hold Threshold:** Allow of a minimum hold threshold, e.g. all buttons must be held for at least 500ms before triggering. To prevent accidental trigger. This value can be set to 0ms initially, but retain the buffer for correction if playtesting reveals consistent accidental triggers.
  
 ##### Art Context
 - **Button States Required:** Idle, held (by this player), all-held (all 4 pressing — pre-dispatch confirmation), triggered.
-- **Global Indicator:** A shared visual element (e.g., a progress bar or set of 4 icons) showing how many players are currently holding, so players can coordinate without verbal communication.
-- **Audio:** Distinct sound cues for first-hold, all-held, dispatch confirmed, and dispatch cancelled.
+- **Global Indicator:** Four dots below the timer, with a on-off state which will turn on based on the total number of buttons held at the point in time.
+- **Audio:** 4 distinct tones in rising scale. Whenever a button is pressed, the max number of buttons held determines the tone which is played.
  
 ---
  
@@ -170,10 +168,8 @@ Scoring is resolved at the end of each round in the following order:
   ```
   bonus_% = floor(seconds_remaining) / 60 × 50%
   ```
-- Whether this is applied additively or multiplicatively is TBD pending playtesting.
  
 ##### Dev Context
-- `seconds_remaining` = `floor(server_time_at_dispatch)`, sourced from the authoritative server timer.
 - The bonus is applied to the shared pool before the color ratio split — all players benefit equally from early dispatch.
  
 ### 3.4 Color Ratio Split
@@ -189,14 +185,13 @@ Scoring is resolved at the end of each round in the following order:
  
 ##### Dev Context
 - Color ownership is tracked per cell: each `cellId` stores the `player_id` of the placer on successful placement.
-- Ratio is computed from the grid snapshot at dispatch. In-flight placements discarded at dispatch time do not count.
  
 ### 3.5 Match Scoring
  
 ##### General Information
 - Per-round scores accumulate across all 3 rounds into a match total.
 - A final leaderboard is displayed at match end, alongside a per-round breakdown.
-- Tie-breaking rule TBD (e.g., most boxes placed, highest single-round score).
+- [Tie-breaking rule TBD (e.g., most boxes placed, highest single-round score)]
  
 ##### Dev Context
 - Maintain a per-player cumulative score ledger updated at the end of each round.
@@ -207,7 +202,7 @@ Scoring is resolved at the end of each round in the following order:
 ### 4.1 Match Flow
  
 ##### General Information
-- Lobby / player join → player color assignment → optional tutorial/control reminder (skippable)
+- Lobby / player join (For Game Jam purposes, assume full 4 players with no potential to disconnect) → player fixed color assignment based on order of joining → optional tutorial/control reminder (skippable)
 - Round 1 → inter-round recap → Round 2 → inter-round recap → Round 3 → final results screen
 - Final results screen shows match totals and per-round breakdown
 - Rematch and main menu options available from the results screen
@@ -220,13 +215,11 @@ Scoring is resolved at the end of each round in the following order:
  
 ##### General Information
 - **Local Party:** Shared screen, split controls, all 4 players on one device.
-- **Online Multiplayer:** Dedicated sessions with latency handling; up to 4 players remotely.
-- **Solo / Practice:** Single player against a simulated queue, no scoring pressure. *(Post-alpha scope)*
  
 ### 4.3 Session Length
  
 ##### General Information
-- **Target:** ~5–8 minutes per match (3 × 60 s rounds + transitions).
+- **Target:** ~4-5 minutes per match (3 × 60 s rounds + transitions).
 - Minimal friction from lobby to gameplay is a priority — players should be packing within 60 seconds of launching a session.
  
 ---
@@ -236,25 +229,23 @@ Scoring is resolved at the end of each round in the following order:
 ### 5.1 Input Scheme
  
 ##### General Information
-- **Primary:** Gamepad. **Fallback:** Keyboard (local multiplayer only).
+- **Primary:** Gamepad. **Fallback:** Keyboard
 - Local multiplayer must support simultaneous independent inputs from all 4 players.
 - **Required Actions:**
   - Browse / select a box from the conveyor belt
   - Move box over grid (grid-snapped)
-  - Rotate box (clockwise / counter-clockwise)
+  - Rotate box (clockwise)
   - Confirm placement
   - Hold dispatch button
  
 ##### Dev Context
 - Each player's input must be isolated — no shared input state between players.
-- Input remapping should be supported for accessibility.
+- [Input remapping should be supported for accessibility.]
  
 ### 5.2 Input Edge Cases
  
 ##### Dev Context
 - **Simultaneous Placement Conflict:** Two players confirm placement on overlapping cells in the same frame. Resolved by the first-come-first-serve queue on the grid (see §2.1); the losing player's box is returned to their conveyor belt.
-- **Dispatch Button — Partial Hold:** If players release and re-press rapidly, the hold threshold (see §2.6) prevents accidental dispatch triggers.
-- **Online Latency:** Input is sent immediately; placement outcome is determined server-side. Local ghost preview may need to be rolled back on a failed server validation.
  
 ---
  
@@ -285,8 +276,7 @@ Scoring is resolved at the end of each round in the following order:
 ##### Art Context
 - **Box Placement (Success):** Drop and lock snap animation
 - **Box Placement (Failure):** Shake and return to conveyor belt
-- **Truck Departure (Normal):** Neutral drive-away
-- **Truck Departure (Early Dispatch):** Celebratory drive-away with fanfare
+- **Truck Departure (Normal & Early Dispatch):** Neutral drive-away
 - **Conveyor Belt:** Scroll animation when a slot replenishes
 - **Score Tally:** Animated count-up on the results screen
  
@@ -294,7 +284,7 @@ Scoring is resolved at the end of each round in the following order:
  
 ##### Art Context
 - **Shared Truck Grid:** Centre of screen; primary visual focus
-- **Player Conveyor Belts:** Screen edges or corners; 4-player layout TBD
+- **Player Conveyor Belts:** Screen edges or corners; 4-player layout TBD [Insert UI Design]
 - **Round Timer:** Prominent, centre-top
 - **Dispatch Global Indicator:** Always visible; positioned near the grid so all players can see it without looking away
 - **Live Score Display:** Optional — evaluate during playtesting whether this adds useful information or visual noise
@@ -324,7 +314,6 @@ Scoring is resolved at the end of each round in the following order:
  
 ##### General Information
 - Optional delivery-themed announcer barks (e.g., "Truck's here!", "Last 10 seconds!", "Dispatched early!").
-- Scope and localization budget TBD.
  
 ---
  
@@ -333,100 +322,104 @@ Scoring is resolved at the end of each round in the following order:
 ### 8.1 Grid State Management
  
 ##### Dev Context
-- Server-authoritative grid for online play; locally predicted for responsiveness with server reconciliation.
 - Cell data model: `cell[x][y] = { cellId: int, cellFilled: bool, playerId: int | null }`
-- All placement actions queued server-side on a first-come-first-serve basis to prevent race conditions (see §2.1).
-- State sync strategy TBD: delta updates vs. full snapshots.
+- All placement actions queued in a list on a first-come-first-serve basis to prevent race conditions (see §2.1).
  
 ### 8.2 Shape & Placement Logic
  
 ##### Dev Context
 - Shape definitions stored as offset arrays per rotation state (0°, 90°, 180°, 270°).
 - Placement validation checks all target cells for `cellFilled` before committing.
-- Ghost/preview rendered client-side from the box's current position and rotation state; no server round-trip required.
  
-### 8.3 Queue & Randomization
- 
-##### Dev Context
-- Per-player weighted RNG; shape weighting table TBD pending playtesting.
-- Consider deterministic per-player seeds to support replay and debugging.
-- Queue state synced to server in online mode; replenishment events are server-driven.
- 
-### 8.4 Timer & Dispatch
+### 8.3 Timer & Dispatch
  
 ##### Dev Context
-- Round timer is server-authoritative; client timers sync periodically to correct drift.
 - Dispatch state machine: `{ player_id: isHolding bool }` — fires when all 4 are `true`.
-- Edge case: player disconnects during active dispatch vote — behavior TBD (treat as `true` or `false`).
  
 ### 8.5 Scoring Engine
  
 ##### Dev Context
-- All scoring formulas (§3.2–3.4) implemented as pure functions; unit-testable in isolation.
+- All scoring formulas (§3.2–3.4) implemented as pure functions; unit-testable in isolation [We don’t test].
 - Inputs: grid snapshot, `seconds_remaining` at dispatch, per-cell `playerId` ownership map.
 - Outputs: per-player round score, cumulative match score, full breakdown for results screen.
  
-### 8.6 Networking (Online Mode)
+---
+
+## 9. Retention — Blocked Cells
+ 
+### 9.1 Concept
+ 
+##### General Information
+- At the start of each round, a random number of grid cells are pre-filled and blocked out before any player places a box.
+- Blocked cells are visually distinct from empty cells and from player-filled cells. They cannot be placed on and cannot be removed.
+- The intention is to introduce a curveball each round — players cannot rely on a fully empty truck and must adapt their placement strategy to the current layout.
+ 
+### 9.2 Scoring Interaction
+ 
+##### General Information
+- Blocked cells are excluded from the total available slots used in the emptiness penalty calculation.
+- Effective grid = total cells − blocked cells. All penalty and ratio calculations operate on this adjusted total.
+- Blocked cells do not contribute to any player's color ratio, as no player placed them.
  
 ##### Dev Context
-- Session model TBD: peer-to-peer vs. dedicated relay vs. hosted server.
-- Latency tolerance target: < 150 ms for acceptable placement feel.
-- Reconnection handling mid-round TBD.
-- Lobby and matchmaking flow TBD.
+- The scoring engine receives the blocked cell count as an input and subtracts it from `total_grid_squares` before applying §3.2 and §3.4 formulas.
+- Blocked cells are flagged via `isBlocked: true` in the cell data model (see §8.1) and are excluded from the `playerId` ownership map.
  
----
- 
-## 9. Progression & Retention *(Post-Launch)*
- 
-### 9.1 Unlockables
+### 9.3 Blocked Cell Generation
  
 ##### General Information
-- Cosmetic box skins per player color
-- Truck liveries
-- Conveyor belt themes
+- Blocked cells are randomly chosen based off a set of pre-designed templates.
  
-### 9.2 Stats & History
+##### Dev Context
+- Blocked at round initialization before players receive control. The blocked layout is fixed for the duration of that round.
  
-##### General Information
-- Per-player match history: rounds played, average fill rate, dispatch rate, top score.
-- Optional leaderboard by match score or fill efficiency.
+##### Art Context
+- Blocked cells require a distinct visual treatment — clearly not empty, and clearly not belonging to any player.
+- Suggested treatment: a darker or hatched fill with a visual indicator (e.g. a crate or obstruction icon) to communicate that the cell is pre-occupied and immovable.
+- Blocked cells do not animate on placement or dispatch.
  
 ---
  
 ## 10. Development Milestones
  
 ### 10.1 Milestone 0 — Prototype
-- Single-player local grid with shape placement and collision
-- Hardcoded 3-box queue cycling
-- Basic round timer and manual dispatch
-- Console-logged scoring output
+- Single-player local grid with shape placement and collision validation
+- Hardcoded 3-box queue with manual cycling (no RNG)
+- Basic 60-second round timer
+- Scoring formulas implemented and logged to console
  
-### 10.2 Milestone 1 — Local Multiplayer Vertical Slice
-- 4-player local support with distinct conveyor belts
-- Full scoring pipeline implemented and displayed
-- Color tracking and ratio split working
-- Basic art pass (placeholder shapes, color fills)
-- Early dispatch collective button mechanic
+### 10.2 Milestone 1 — Core Loop Playable
+- 4-player local support with 4 independent conveyor belts (all visible)
+- RNG box queue replenishment per player
+- Full placement flow: select → position → rotate → confirm → success/fail feedback
+- Early dispatch button mechanic with 4-dot global indicator and rising tone audio
+- 3-round match structure with inter-round transition (no art yet)
+- Scoring pipeline producing correct per-player output
  
-### 10.3 Milestone 2 — Alpha
-- 3-round match flow with inter-round recap and final results
-- Audio SFX pass
-- Full shape library with rotations
-- HUD polish and readability pass
-- Playtesting feedback integration (grid size, shape balance, timer)
+### 10.3 Milestone 2 — Blocked Cells & Balance
+- Blocked cell generation at round start with configurable range
+- Scoring engine updated to exclude blocked cells from calculations
+- Blocked cell visual treatment (placeholder art)
+- First full playtesting pass: grid size, shape pool, blocked cell count, timer feel, dispatch threshold
  
-### 10.4 Milestone 3 — Beta
-- Online multiplayer implementation
-- Latency handling and conflict resolution
-- Full art and animation pass
-- Music and audio polish
-- Accessibility review (color-blind modes, input remapping)
+### 10.4 Milestone 3 — Art & Audio Pass
+- Full sprite set for all box shapes (greyscale, tinted in engine)
+- Conveyor belt UI with idle and replenishing states
+- Box placement success/fail animations
+- Truck departure animation
+- Dispatch button states and indicator
+- Timer urgency state (≤ 10 s)
+- SFX pass: all events in §7.1
+- Music: main loop, urgency variant, results jingle
+- Results screen and per-round recap layouts
  
-### 10.5 Milestone 4 — Release Candidate
-- Performance and stability pass
-- Balance tuning (shape weights, scoring formula constants)
-- Localization (UI strings, announcer if applicable)
-- Platform certification preparation
+### 10.5 Milestone 4 — Polish & Game Jam Submission
+- HUD readability pass against all 4 player colors simultaneously
+- Input mapping finalized for 4 local controllers + keyboard fallback
+- Stretch goal: announcer barks
+- Stretch goal: celebratory early dispatch truck departure
+- Final playtesting and balance tuning (shape weights, blocked cell range, scoring constants)
+- Build packaged and submitted
  
 ---
  
@@ -434,18 +427,18 @@ Scoring is resolved at the end of each round in the following order:
  
 | # | Question | Priority | Notes |
 |---|----------|----------|-------|
-| 1 | Final grid size (6×4 baseline vs. alternatives) | High | Affects all balance calculations |
+| 1 | Final grid size (6×4 baseline vs. alternatives) | High | Affects all balance and blocked cell calculations |
 | 2 | Early dispatch bonus: additive or multiplicative? | High | Changes feel of the dispatch reward |
 | 3 | Base score per round | High | Sets scale for all other values |
-| 4 | Shape rotation: free analogue or snap-to-90°? | Medium | UX and time-pressure implications |
-| 5 | Dispatch hold threshold duration | Medium | Too short = accidental triggers; too long = frustrating |
-| 6 | Player disconnect during dispatch vote: true or false? | Medium | Affects online fairness |
-| 7 | Online session model (P2P / relay / server) | Medium | Affects latency and cost |
-| 8 | Color-blind accessibility: patterns or icons on boxes? | Medium | Required for accessibility compliance |
-| 9 | Live score display in HUD: include or remove? | Low | May add noise; evaluate in playtesting |
+| 4 | Blocked cell count range per round | High | Too few = no impact; too many = frustrating |
+| 5 | Blocked cell generation constraints (avoid unreachable regions?) | Medium | Evaluate during playtesting |
+| 6 | Shape rotation: snap-to-90° only, or free analogue? | Medium | UX and time-pressure implications |
+| 7 | Dispatch hold threshold duration | Medium | Start at 0 ms; tune upward if accidental triggers occur |
+| 8 | Color-blind accessibility: patterns or icons on boxes? | Medium | Player color differentiation is core to scoring |
+| 9 | Live score display in HUD: include or omit? | Low | May add useful info or visual noise — evaluate in playtesting |
 | 10 | Tie-breaking rule on final leaderboard | Low | Needs definition before results screen is built |
-| 11 | Solo / practice mode AI conveyor behavior | Low | Post-alpha scope |
-| 12 | Announcer voice lines: scope and localization budget | Low | Nice-to-have |
+| 11 | Announcer voice lines | Low | Stretch goal |
+| 12 | Celebratory early dispatch truck animation | Low | Stretch goal |
  
 ---
  
