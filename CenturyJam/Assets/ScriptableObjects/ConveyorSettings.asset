@@ -17,13 +17,13 @@ MonoBehaviour:
   parcelPool:
   - parcel: {fileID: 11400000, guid: 4e4d4c23ff3834705b6c54159bdcd972, type: 2}
     complexity: 0
-    baseWeight: 0
+    baseWeight: 1
   - parcel: {fileID: 11400000, guid: 6fdfc1a4e6f96402da548f08bf4437dc, type: 2}
     complexity: 2
-    baseWeight: 0
+    baseWeight: 1
   - parcel: {fileID: 11400000, guid: 94b93b50c214c40699b2c15dba24f0c3, type: 2}
     complexity: 3
-    baseWeight: 0
+    baseWeight: 1
   startingComplexityBias: 0.2
   maxComplexityBias: 0.8
   windowSize: 6
