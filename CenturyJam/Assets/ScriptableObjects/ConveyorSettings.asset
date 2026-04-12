@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 34ce2fe07fb49463fa2f5e2925b6eae0, type: 3}
+  m_Name: ConveyorSettings
+  m_EditorClassIdentifier: Assembly-CSharp::ConveyorSettings
+  slotCount: 3
+  slotSpacing: 1.5
+  parcelPool:
+  - parcel: {fileID: 11400000, guid: 4e4d4c23ff3834705b6c54159bdcd972, type: 2}
+    complexity: 0
+    baseWeight: 0
+  - parcel: {fileID: 11400000, guid: 6fdfc1a4e6f96402da548f08bf4437dc, type: 2}
+    complexity: 2
+    baseWeight: 0
+  - parcel: {fileID: 11400000, guid: 94b93b50c214c40699b2c15dba24f0c3, type: 2}
+    complexity: 3
+    baseWeight: 0
+  startingComplexityBias: 0.2
+  maxComplexityBias: 0.8
+  windowSize: 6
