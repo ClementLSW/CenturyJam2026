@@ -52,10 +52,10 @@ public class ConveyorManager : MonoBehaviour
         return belts[playerIndex];
     }
 
-    void Start()
-    {
-        // TODO: remove when GameManager exists
-        SetupBelts(4);
-        StartRound();
-    }
+    // void Start()
+    // {
+    //     // TODO: remove when GameManager exists
+    //     SetupBelts(4);
+    //     StartRound();
+    // }
 }

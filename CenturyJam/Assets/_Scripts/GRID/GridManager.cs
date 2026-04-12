@@ -12,6 +12,9 @@ public class GridManager : MonoBehaviour
     private CellData[,] grid;
     private int width;
     private int height;
+
+    public int Width => width;
+    public int Height => height;
     private Dictionary<int, ParcelData> parcelRegistry = new Dictionary<int, ParcelData>();
 
 
@@ -22,7 +25,7 @@ public class GridManager : MonoBehaviour
 
     private void Start()
     {
-        LoadTemplate(template);
+        //LoadTemplate(template);
     }
 
     public void LoadTemplate(TruckTemplate t)
