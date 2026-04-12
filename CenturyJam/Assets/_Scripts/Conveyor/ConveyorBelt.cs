@@ -10,10 +10,12 @@ public class ConveyorBelt : MonoBehaviour
     private Transform[] slotTransforms;
     private int ownerID;
     private int totalSpawned = 0;
+    private Color playerColor;
 
 public void Initialize(int playerID, Color playerColor)
 {
     ownerID = playerID;
+    this.playerColor = playerColor;
     slots = new WorldParcel[settings.slotCount];
     slotTransforms = new Transform[settings.slotCount];
 
@@ -95,6 +97,7 @@ public void Initialize(int playerID, Color playerColor)
 
         var sr = go.AddComponent<SpriteRenderer>();
         sr.sprite = data.parcelSprite;
+        sr.color = playerColor;
         sr.sortingOrder = 1;
 
         var col = go.AddComponent<CircleCollider2D>();

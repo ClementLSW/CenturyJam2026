@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class ParcelHandler : MonoBehaviour
 {
+    [SerializeField] private ConveyorManager conveyorManager;
     [SerializeField] private GridManager gridManager;
     [SerializeField] private float pickupRange = 1f;
 
@@ -15,6 +16,7 @@ public class ParcelHandler : MonoBehaviour
     {
         cursor = GetComponent<PlayerCursor>();
         ghostRenderer = GetComponent<GhostRenderer>();
+        conveyorManager = FindObjectOfType<ConveyorManager>();
     }
 
     public bool IsHolding => heldParcel != null;
@@ -45,13 +47,14 @@ public class ParcelHandler : MonoBehaviour
 
     private void TryPickUp()
     {
-        // Uncommitted parcels — own only
-        var hits = Physics2D.OverlapCircleAll(transform.position, pickupRange);
-        foreach (var hit in hits)
+        // Check own belt first
+        ConveyorBelt myBelt = conveyorManager.GetBelt(cursor.PlayerIndex);
+        if (myBelt != null)
         {
-            var wp = hit.GetComponent<WorldParcel>();
-            if (wp != null && wp.ownerID == cursor.PlayerIndex && wp.parcelID == -1)
+            int slot = myBelt.GetSlotAtPosition(transform.position, pickupRange);
+            if (slot != -1)
             {
+                WorldParcel wp = myBelt.GrabFromSlot(slot);
                 PickUp(wp);
                 return;
             }
@@ -64,8 +67,23 @@ public class ParcelHandler : MonoBehaviour
             int parcelId = gridManager.GetParcelIdAt(gridPos);
             if (parcelId != -1)
             {
+                CellData cell = gridManager.GetCell(gridPos);
+                ParcelData data = gridManager.GetParcelDataAt(gridPos);
+                int originalOwner = cell.ownerID;
+
                 gridManager.RemoveParcel(parcelId);
-                // TODO: reconstruct WorldParcel from parcel registry
+
+                var go = new GameObject("PickedParcel");
+                go.transform.position = transform.position;
+                var wp = go.AddComponent<WorldParcel>();
+                wp.data = data;
+                wp.ownerID = originalOwner;
+                wp.parcelID = parcelId;
+                wp.sourceSlotIndex = -1;
+                wp.sourceBelt = null;
+
+                PickUp(wp);
+                return;
             }
         }
     }
@@ -79,6 +97,7 @@ public class ParcelHandler : MonoBehaviour
         var go = new GameObject("HeldVisual");
         heldVisual = go.AddComponent<SpriteRenderer>();
         heldVisual.sprite = wp.data.parcelSprite;
+        heldVisual.color = cursor.PlayerColor;
         heldVisual.sortingOrder = 10;
     }
 
@@ -92,15 +111,33 @@ public class ParcelHandler : MonoBehaviour
             {
                 int id = gridManager.PlaceParcel(
                     heldParcel.data.shapeOffsets, gridPos,
-                    currentRotation, cursor.PlayerIndex);
+                    currentRotation, cursor.PlayerIndex, heldParcel.data);
                 heldParcel.parcelID = id;
                 heldParcel.ownerID = cursor.PlayerIndex;
+
+                if (heldParcel.sourceBelt != null && heldParcel.sourceSlotIndex >= 0)
+                    {
+                        heldParcel.sourceBelt.OnParcelCommitted(heldParcel.sourceSlotIndex);
+                    }
+
                 CleanupHeld();
                 return;
             }
         }
 
-        // TODO: check if cursor is over own belt — return parcel
+       if (heldParcel.ownerID == cursor.PlayerIndex)
+        {
+            ConveyorBelt myBelt = conveyorManager.GetBelt(cursor.PlayerIndex);
+            if (myBelt != null && myBelt.TryReturnParcel(heldParcel, transform.position))
+            {
+                heldParcel.parcelID = -1;
+                if (heldVisual != null) Destroy(heldVisual.gameObject);
+                heldParcel = null;
+                heldVisual = null;
+                currentRotation = 0;
+                return;
+            }
+        }
 
         Debug.Log("Can't place here");
     }
@@ -114,6 +151,7 @@ public class ParcelHandler : MonoBehaviour
     public void CleanupHeld()
     {
         if (heldVisual != null) Destroy(heldVisual.gameObject);
+        if (heldParcel != null) Destroy(heldParcel.gameObject);
         heldParcel = null;
         heldVisual = null;
         currentRotation = 0;

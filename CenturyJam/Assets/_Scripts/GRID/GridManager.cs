@@ -12,6 +12,8 @@ public class GridManager : MonoBehaviour
     private CellData[,] grid;
     private int width;
     private int height;
+    private Dictionary<int, ParcelData> parcelRegistry = new Dictionary<int, ParcelData>();
+
 
     // World-space origin = this transform's position (bottom-left corner)
     private Vector2 Origin => (Vector2)transform.position;
@@ -80,8 +82,8 @@ public class GridManager : MonoBehaviour
         return true;
     }
 
-    public int PlaceParcel(List<Vector2Int> shapeOffsets, Vector2Int gridPos, 
-                          int rotation, int ownerID)
+    public int PlaceParcel(List<Vector2Int> shapeOffsets, Vector2Int gridPos,
+                        int rotation, int ownerID, ParcelData data)
     {
         var rotated = ParcelUtility.RotateShape(shapeOffsets, rotation);
         int parcelId = nextparcelId++;
@@ -94,22 +96,26 @@ public class GridManager : MonoBehaviour
             grid[cell.x, cell.y].parcelID = parcelId;
         }
 
+        parcelRegistry[parcelId] = data;
         RefreshVisuals();
         return parcelId;
+    }
+
+    public ParcelData GetParcelDataAt(Vector2Int gridPos)
+    {
+        int id = GetParcelIdAt(gridPos);
+        if (id == -1) return null;
+        return parcelRegistry.ContainsKey(id) ? parcelRegistry[id] : null;
     }
 
     public void RemoveParcel(int parcelId)
     {
         for (int x = 0; x < width; x++)
-        {
             for (int y = 0; y < height; y++)
-            {
                 if (grid[x, y].parcelID == parcelId)
-                {
-                    grid[x, y] = new CellData(); // reset to empty
-                }
-            }
-        }
+                    grid[x, y] = new CellData();
+
+        parcelRegistry.Remove(parcelId);
         RefreshVisuals();
     }
 
