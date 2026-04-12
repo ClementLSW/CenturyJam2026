@@ -1,0 +1,1 @@
+public enum CellState { Empty, Blocked, Occupied }

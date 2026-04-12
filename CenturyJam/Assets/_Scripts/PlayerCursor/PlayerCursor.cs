@@ -7,7 +7,11 @@ public class PlayerCursor : MonoBehaviour
 
 
     private Vector2 moveInput;
-    private int playerIndex;
+    private ParcelHandler parcelHandler;
+    public int PlayerIndex { get; private set; }
+    public Color PlayerColor { get; private set; }
+
+    private static readonly Color[] Colors = { Color.red, Color.blue, Color.green, Color.yellow };
 
     public void OnMove(InputAction.CallbackContext ctx)
     {
@@ -16,17 +20,17 @@ public class PlayerCursor : MonoBehaviour
 
     public void OnInteract(InputAction.CallbackContext ctx)
     {
-        if (ctx.performed) HandleInteract();
+        if (ctx.performed) parcelHandler.HandleInteract();
     }
 
     public void OnRotateCW(InputAction.CallbackContext ctx)
     {
-        if (ctx.performed) HandleRotateCW();
+        if (ctx.performed) parcelHandler.HandleRotateCW();
     }
 
     public void OnRotateCCW(InputAction.CallbackContext ctx)
     {
-        if (ctx.performed) HandleRotateCCW();
+        if (ctx.performed) parcelHandler.HandleRotateCCW();
     }
 
     public void OnPause(InputAction.CallbackContext ctx)
@@ -36,26 +40,14 @@ public class PlayerCursor : MonoBehaviour
 
     void Start()
     {
-        playerIndex = GetComponent<PlayerInput>().playerIndex;
-        // Use playerIndex to assign color, belt, etc.
+        PlayerIndex = GetComponent<PlayerInput>().playerIndex;
+        PlayerColor = Colors[PlayerIndex % Colors.Length];
+        parcelHandler = GetComponent<ParcelHandler>();
     }
 
     void Update()
     {
         transform.position += (Vector3)(moveInput * cursorSettings.MoveSpeed * Time.deltaTime);
-    }
-
-    void HandleInteract() {
-        //TODO: Handle Interaction
-        Debug.Log("Interacted with object");
-    }
-    void HandleRotateCW() { 
-        // TODO: Handle Rotation Clockwise
-        Debug.Log("Rotated Clockwise");
-     }
-    void HandleRotateCCW() { 
-        // TODO: Handle Rotation Counter-Clockwise
-        Debug.Log("Rotated Counter-Clockwise");
     }
 
     void HandlePause() {
