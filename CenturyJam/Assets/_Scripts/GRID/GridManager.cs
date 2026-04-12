@@ -101,13 +101,6 @@ public class GridManager : MonoBehaviour
         return parcelId;
     }
 
-    public ParcelData GetParcelDataAt(Vector2Int gridPos)
-    {
-        int id = GetParcelIdAt(gridPos);
-        if (id == -1) return null;
-        return parcelRegistry.ContainsKey(id) ? parcelRegistry[id] : null;
-    }
-
     public void RemoveParcel(int parcelId)
     {
         for (int x = 0; x < width; x++)
@@ -132,6 +125,13 @@ public class GridManager : MonoBehaviour
         if (!InBounds(gridPos)) return -1;
         if (grid[gridPos.x, gridPos.y].state != CellState.Occupied) return -1;
         return grid[gridPos.x, gridPos.y].parcelID;
+    }
+
+    public ParcelData GetParcelDataAt(Vector2Int gridPos)
+    {
+        int id = GetParcelIdAt(gridPos);
+        if (id == -1) return null;
+        return parcelRegistry.ContainsKey(id) ? parcelRegistry[id] : null;
     }
 
     private bool InBounds(Vector2Int pos)
