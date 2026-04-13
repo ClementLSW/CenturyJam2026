@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 public class ParcelHandler : MonoBehaviour
 {
@@ -8,6 +9,7 @@ public class ParcelHandler : MonoBehaviour
 
     private PlayerCursor cursor;
     private GhostRenderer ghostRenderer;
+
     private WorldParcel heldParcel;
     private SpriteRenderer heldVisual;
     private int currentRotation;
@@ -44,27 +46,34 @@ public class ParcelHandler : MonoBehaviour
         currentRotation = (currentRotation + 3) % 4;
         ghostRenderer.ForceRefresh();
     }
-
     private void TryPickUp()
     {
-        // Check own belt first
-        ConveyorBelt myBelt = conveyorManager.GetBelt(cursor.PlayerIndex);
-        if (myBelt != null)
+        List<ConveyorBelt> belts = conveyorManager.GetBelts(cursor.PlayerIndex);
+
+        foreach (var belt in belts)
         {
-            int slot = myBelt.GetSlotAtPosition(transform.position, pickupRange);
-            if (slot != -1)
+            WorldParcel wp = belt.GetReadyParcel();
+
+            if (wp == null) continue;
+
+            float dist = Vector2.Distance(
+                transform.position,
+                wp.transform.position
+            );
+
+            if (dist <= pickupRange)
             {
-                WorldParcel wp = myBelt.GrabFromSlot(slot);
+                belt.TryTakeParcel(); // important: clear belt state
                 PickUp(wp);
                 return;
             }
         }
 
-        // Committed parcels on grid — anyone's
         if (gridManager.IsInsideBounds(transform.position))
         {
             Vector2Int gridPos = gridManager.WorldToGrid(transform.position);
             int parcelId = gridManager.GetParcelIdAt(gridPos);
+
             if (parcelId != -1)
             {
                 CellData cell = gridManager.GetCell(gridPos);
@@ -75,12 +84,11 @@ public class ParcelHandler : MonoBehaviour
 
                 var go = new GameObject("PickedParcel");
                 go.transform.position = transform.position;
+
                 var wp = go.AddComponent<WorldParcel>();
                 wp.data = data;
                 wp.ownerID = originalOwner;
                 wp.parcelID = parcelId;
-                wp.sourceSlotIndex = -1;
-                wp.sourceBelt = null;
 
                 PickUp(wp);
                 return;
@@ -101,53 +109,44 @@ public class ParcelHandler : MonoBehaviour
         heldVisual.sortingOrder = 10;
     }
 
+
     private void TryPlace()
-{
-    // Can only place on valid grid spot
-    if (gridManager.IsInsideBounds(transform.position))
     {
-        Vector2Int gridPos = gridManager.WorldToGrid(transform.position);
-        if (gridManager.CanPlace(heldParcel.data.shapeOffsets, gridPos, currentRotation))
+        // PLACE ON GRID
+        if (gridManager.IsInsideBounds(transform.position))
         {
-            int id = gridManager.PlaceParcel(
-                heldParcel.data.shapeOffsets, gridPos,
-                currentRotation, cursor.PlayerIndex, heldParcel.data);
-            heldParcel.parcelID = id;
-            heldParcel.ownerID = cursor.PlayerIndex;
+            Vector2Int gridPos = gridManager.WorldToGrid(transform.position);
 
-            if (heldParcel.sourceBelt != null && heldParcel.sourceSlotIndex >= 0)
+            if (gridManager.CanPlace(
+                heldParcel.data.shapeOffsets,
+                gridPos,
+                currentRotation))
             {
-                heldParcel.sourceBelt.OnParcelCommitted(heldParcel.sourceSlotIndex);
+                int id = gridManager.PlaceParcel(
+                    heldParcel.data.shapeOffsets,
+                    gridPos,
+                    currentRotation,
+                    cursor.PlayerIndex,
+                    heldParcel.data);
+
+                heldParcel.parcelID = id;
+                heldParcel.ownerID = cursor.PlayerIndex;
+
+                conveyorManager.NotifyParcelPlaced(cursor.PlayerIndex); //respawn parcel
+
+                CleanupHeld();
+                return;
             }
+            else
+            {
+                Debug.Log("Invalid placement");
+                return;
+            }
+        }
 
-            CleanupHeld();
-            return;
-        }
-        else
-        {
-            // Inside grid but invalid spot — reject, don't fall through
-            Debug.Log("Invalid placement");
-            return;
-        }
+        // ❌ NO MORE RETURN TO BELT
+        Debug.Log("Can't place here");
     }
-
-    // Only reach here if OUTSIDE grid bounds
-    if (heldParcel.ownerID == cursor.PlayerIndex)
-    {
-        ConveyorBelt myBelt = conveyorManager.GetBelt(cursor.PlayerIndex);
-        if (myBelt != null && myBelt.TryReturnParcel(heldParcel, transform.position))
-        {
-            heldParcel.parcelID = -1;
-            if (heldVisual != null) Destroy(heldVisual.gameObject);
-            heldParcel = null;
-            heldVisual = null;
-            currentRotation = 0;
-            return;
-        }
-    }
-
-    Debug.Log("Can't place here");
-}
 
     void Update()
     {
@@ -159,6 +158,7 @@ public class ParcelHandler : MonoBehaviour
     {
         if (heldVisual != null) Destroy(heldVisual.gameObject);
         if (heldParcel != null) Destroy(heldParcel.gameObject);
+
         heldParcel = null;
         heldVisual = null;
         currentRotation = 0;

@@ -35,7 +35,7 @@ public class GameManager : MonoBehaviour
         // TODO: replace with actual player count from lobby
         playerCount = PlayerInputManager.instance != null
             ? PlayerInputManager.instance.playerCount
-            : 2;
+            : 4;
 
         totalScores = new int[playerCount];
         conveyorManager.SetupBelts(playerCount);

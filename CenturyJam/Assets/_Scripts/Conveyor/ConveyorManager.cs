@@ -1,61 +1,63 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 public class ConveyorManager : MonoBehaviour
 {
-    [SerializeField] private ConveyorBelt beltPrefab;
-    [SerializeField] private float beltOffset = 6f;
-
-    private ConveyorBelt[] belts;
+    public PlayerConveyorGroup[] players;
 
     private static readonly Color[] PlayerColors =
         { Color.red, Color.blue, Color.green, Color.yellow };
 
-    // TL, TR, BL, BR
-    private static readonly Vector2[] BeltPositions =
+    void Awake()
     {
-        new Vector2(-1,  0.5f), // P1: left-top
-        new Vector2( 1,  0.5f), // P2: right-top
-        new Vector2(-1, -0.5f), // P3: left-bottom
-        new Vector2( 1, -0.5f), // P4: right-bottom
-    };
-
-    // Belts point inward toward the truck
-    // private static readonly float[] BeltRotations =
-    //     { -45f, -135f, 45f, 135f };
-
-    private static readonly float[] BeltRotations =
-    { 0f, 0f, 0f, 0f };
+        players = FindObjectsOfType<PlayerConveyorGroup>();
+    }
 
     public void SetupBelts(int playerCount)
     {
-        belts = new ConveyorBelt[playerCount];
+        // Optional safety check
+        if (players.Length < playerCount)
+        {
+            Debug.LogError("Not enough PlayerConveyorGroup objects in scene!");
+            return;
+        }
 
         for (int i = 0; i < playerCount; i++)
         {
-            Vector2 pos = BeltPositions[i] * beltOffset;
-            var belt = Instantiate(beltPrefab, pos,
-                Quaternion.identity, transform);
-            belt.Initialize(i, PlayerColors[i]);
-            belts[i] = belt;
+            players[i].Initialize(i, PlayerColors[i]);
         }
     }
 
     public void StartRound()
     {
-        foreach (var belt in belts)
-            belt.FillAllSlots();
+        foreach (var player in players)
+        {
+            foreach (var belt in player.GetBelts())
+            {
+                belt.SpawnParcel();
+            }
+        }
     }
 
-    public ConveyorBelt GetBelt(int playerIndex)
+    public void NotifyParcelPlaced(int playerID)
     {
-        if (playerIndex < 0 || playerIndex >= belts.Length) return null;
-        return belts[playerIndex];
+        var belts = GetBelts(playerID);
+
+        foreach (var belt in belts)
+        {
+            if (belt.HasParcelReady()) continue;
+            belt.SpawnParcel();
+        }
     }
 
-    // void Start()
-    // {
-    //     // TODO: remove when GameManager exists
-    //     SetupBelts(4);
-    //     StartRound();
-    // }
+    public List<ConveyorBelt> GetBelts(int playerID)
+    {
+        foreach (var player in players)
+        {
+            if (player.PlayerID == playerID)
+                return new List<ConveyorBelt>(player.GetBelts());
+        }
+
+        return null;
+    }
 }
