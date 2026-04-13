@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using TMPro;
@@ -12,6 +13,7 @@ public class GameManager : MonoBehaviour
     [Header("Round Settings")]
     [SerializeField] private int totalRounds = 3;
     [SerializeField] private float roundDuration = 60f;
+    [SerializeField] private int baseRoundScore = 1000;
 
     [Header("UI")]
     [SerializeField] private TextMeshProUGUI timerText;
@@ -107,7 +109,59 @@ public class GameManager : MonoBehaviour
 
     private void TallyRoundScores()
     {
+        int totalFilledCells = 0;
+        int player1Cells = 0, player2Cells = 0, player3Cells = 0, player4Cells = 0;
         for (int x = 0; x < gridManager.Width; x++)
+        {
+            for (int y = 0; y < gridManager.Height; y++)
+            {
+                Vector2Int pos = new Vector2Int(x, y);
+                CellData cell = gridManager.GetCell(pos);
+
+                if (cell.state == CellState.Occupied)
+                {
+                    totalFilledCells++;
+                    
+                    ParcelData data = gridManager.GetParcelDataAt(pos);
+                    if (data != null)
+                    {
+                        switch (cell.ownerID)
+                        {
+                            case 0:
+                                player1Cells++;
+                                break;
+                            case 1:
+                                player2Cells++;
+                                break;
+                            case 2:
+                                player3Cells++;
+                                break;
+                            case 3:
+                                player4Cells++;
+                                break;
+                        }
+                    }
+                }
+            }
+        }
+        //Divide by 0 check, if totalFilledCells is 0 just break, because there's no point calculating. No one did shit here
+        if (totalFilledCells <= 0) return;
+        
+        //Calculate Penalty
+        var totalGridSquares = gridManager.Height * gridManager.Width;
+        var buffer = Mathf.FloorToInt(0.1f * totalGridSquares);
+        var excessEmpty = Math.Max(totalFilledCells - totalFilledCells - buffer, 0);
+        var penalty = ((float)excessEmpty / (float)totalGridSquares);
+        var adjustedBaseScore = baseRoundScore * Mathf.FloorToInt(1 - penalty);
+
+        //Calculate individual color-ratio
+        totalScores[0] = adjustedBaseScore * (player1Cells / totalFilledCells);
+        totalScores[1] = adjustedBaseScore * (player2Cells / totalFilledCells);
+        totalScores[2] = adjustedBaseScore * (player3Cells / totalFilledCells);
+        totalScores[3] = adjustedBaseScore * (player4Cells / totalFilledCells);
+
+        //Outdated
+        /*for (int x = 0; x < gridManager.Width; x++)
         {
             for (int y = 0; y < gridManager.Height; y++)
             {
@@ -128,7 +182,7 @@ public class GameManager : MonoBehaviour
                     }
                 }
             }
-        }
+        }*/
     }
 
     private bool IsFirstCellOfParcel(Vector2Int pos, int parcelId)
