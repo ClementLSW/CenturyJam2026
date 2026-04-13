@@ -1,5 +1,8 @@
+using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 public class PlayerCursor : MonoBehaviour
 {
@@ -9,10 +12,10 @@ public class PlayerCursor : MonoBehaviour
     private Vector2 moveInput;
     private ParcelHandler parcelHandler;
     public int PlayerIndex { get; private set; }
-    public Color PlayerColor { get; private set; }
-
-    private static readonly Color[] Colors = { Color.red, Color.blue, Color.green, Color.yellow };
-
+    private Color _playerColor;
+    public Color PlayerColor => _playerColor;
+    private SpriteRenderer _cursorSprite;
+    
     public void OnMove(InputAction.CallbackContext ctx)
     {
         moveInput = ctx.ReadValue<Vector2>();
@@ -20,17 +23,17 @@ public class PlayerCursor : MonoBehaviour
 
     public void OnInteract(InputAction.CallbackContext ctx)
     {
-        if (ctx.performed) parcelHandler.HandleInteract();
+        if (ctx.performed && parcelHandler != null) parcelHandler.HandleInteract();
     }
 
     public void OnRotateCW(InputAction.CallbackContext ctx)
     {
-        if (ctx.performed) parcelHandler.HandleRotateCW();
+        if (ctx.performed && parcelHandler != null) parcelHandler.HandleRotateCW();
     }
 
     public void OnRotateCCW(InputAction.CallbackContext ctx)
     {
-        if (ctx.performed) parcelHandler.HandleRotateCCW();
+        if (ctx.performed && parcelHandler != null) parcelHandler.HandleRotateCCW();
     }
 
     public void OnPause(InputAction.CallbackContext ctx)
@@ -38,11 +41,27 @@ public class PlayerCursor : MonoBehaviour
         if (ctx.performed) HandlePause();
     }
 
+    private void Awake()
+    {
+        _cursorSprite = GetComponent<SpriteRenderer>();
+    }
+
     void Start()
     {
         PlayerIndex = GetComponent<PlayerInput>().playerIndex;
-        PlayerColor = Colors[PlayerIndex % Colors.Length];
         parcelHandler = GetComponent<ParcelHandler>();
+        DontDestroyOnLoad(gameObject);
+    }
+
+    public void SetPlayerColor(Color color)
+    {
+        _playerColor = color;
+        StartCoroutine(WaitForSpriteRendererAndSetColor());
+        IEnumerator WaitForSpriteRendererAndSetColor()
+        {
+            while (_cursorSprite ==null) yield return null;
+            _cursorSprite.color = _playerColor;
+        }
     }
 
     void Update()

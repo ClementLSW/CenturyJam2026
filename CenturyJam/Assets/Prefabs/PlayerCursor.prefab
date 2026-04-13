@@ -11,6 +11,8 @@ GameObject:
   - component: {fileID: 2769281973655412508}
   - component: {fileID: 2582864438756529388}
   - component: {fileID: 7643629403878634832}
+  - component: {fileID: 960605523745668120}
+  - component: {fileID: 3096822358778075966}
   - component: {fileID: 5175159829673951018}
   m_Layer: 0
   m_Name: PlayerCursor
@@ -106,6 +108,35 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerCursor
   cursorSettings: {fileID: 11400000, guid: 5ca14cf409710437b98e13ed77f784b3, type: 2}
+--- !u!114 &960605523745668120
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5530887575852282793}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 463f42cf6140b428bae71c52e4e16298, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ParcelHandler
+  conveyorManager: {fileID: 0}
+  gridManager: {fileID: 0}
+  pickupRange: 1
+--- !u!114 &3096822358778075966
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5530887575852282793}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 990fca3d2edae4b80a8c93ff88143ea0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GhostRenderer
+  ghostParcelPrefab: {fileID: 6154891947185514472, guid: e6b20e20de54f446d9ca14f78139dbff, type: 3}
+  gridManager: {fileID: 0}
 --- !u!114 &5175159829673951018
 MonoBehaviour:
   m_ObjectHideFlags: 0
