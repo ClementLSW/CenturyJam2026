@@ -23,17 +23,17 @@ public class PlayerCursor : MonoBehaviour
 
     public void OnInteract(InputAction.CallbackContext ctx)
     {
-        if (ctx.performed && parcelHandler != null) parcelHandler.HandleInteract();
+        if (ctx.performed && StateManager.Instance.GetCurrentScene() == StateManager.GameState.GAME) parcelHandler.HandleInteract();
     }
 
     public void OnRotateCW(InputAction.CallbackContext ctx)
     {
-        if (ctx.performed && parcelHandler != null) parcelHandler.HandleRotateCW();
+        if (ctx.performed && StateManager.Instance.GetCurrentScene() == StateManager.GameState.GAME) parcelHandler.HandleRotateCW();
     }
 
     public void OnRotateCCW(InputAction.CallbackContext ctx)
     {
-        if (ctx.performed && parcelHandler != null) parcelHandler.HandleRotateCCW();
+        if (ctx.performed && StateManager.Instance.GetCurrentScene() == StateManager.GameState.GAME) parcelHandler.HandleRotateCCW();
     }
 
     public void OnPause(InputAction.CallbackContext ctx)
