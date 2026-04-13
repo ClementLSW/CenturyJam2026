@@ -176,6 +176,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 960605523745668120, guid: 5ec8a84cb337045cca4574aa9d51767c, type: 3}
+      propertyPath: gridManager
+      value: 
+      objectReference: {fileID: 1209617210}
+    - target: {fileID: 960605523745668120, guid: 5ec8a84cb337045cca4574aa9d51767c, type: 3}
+      propertyPath: conveyorManager
+      value: 
+      objectReference: {fileID: 138730606}
     - target: {fileID: 2769281973655412508, guid: 5ec8a84cb337045cca4574aa9d51767c, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -216,6 +224,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3096822358778075966, guid: 5ec8a84cb337045cca4574aa9d51767c, type: 3}
+      propertyPath: gridManager
+      value: 
+      objectReference: {fileID: 1209617210}
     - target: {fileID: 5530887575852282793, guid: 5ec8a84cb337045cca4574aa9d51767c, type: 3}
       propertyPath: m_Name
       value: PlayerCursor
@@ -223,13 +235,7 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 5530887575852282793, guid: 5ec8a84cb337045cca4574aa9d51767c, type: 3}
-      insertIndex: 3
-      addedObject: {fileID: 1671122960}
-    - targetCorrespondingSourceObject: {fileID: 5530887575852282793, guid: 5ec8a84cb337045cca4574aa9d51767c, type: 3}
-      insertIndex: 4
-      addedObject: {fileID: 1671122959}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5ec8a84cb337045cca4574aa9d51767c, type: 3}
 --- !u!1 &219393629
 GameObject:
@@ -1884,40 +1890,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 3304443307302194866, guid: 4fd204b5a25740a48925360c74211b7d, type: 3}
   m_PrefabInstance: {fileID: 967211538}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &1671122954 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5530887575852282793, guid: 5ec8a84cb337045cca4574aa9d51767c, type: 3}
-  m_PrefabInstance: {fileID: 170505965}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1671122959
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1671122954}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 990fca3d2edae4b80a8c93ff88143ea0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::GhostRenderer
-  ghostParcelPrefab: {fileID: 6154891947185514472, guid: e6b20e20de54f446d9ca14f78139dbff, type: 3}
-  gridManager: {fileID: 1209617210}
---- !u!114 &1671122960
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1671122954}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 463f42cf6140b428bae71c52e4e16298, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ParcelHandler
-  conveyorManager: {fileID: 0}
-  gridManager: {fileID: 1209617210}
-  pickupRange: 1
 --- !u!4 &1700156216 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3304443307302194866, guid: 4fd204b5a25740a48925360c74211b7d, type: 3}
