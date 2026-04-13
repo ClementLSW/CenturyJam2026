@@ -6,8 +6,8 @@ public class StateManager : MonoBehaviour
 {
     public static StateManager Instance { get; private set; }
     private GameState _gameState;
-    public GameState GetCurrentScene() => _gameState;
-    public void SetCurrentScene(GameState gameState) => _gameState = gameState;
+    public GameState GetCurrentState() => _gameState;
+    public void SetCurrentState(GameState gameState) => _gameState = gameState;
 
     private void Awake()
     {
