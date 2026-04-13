@@ -177,6 +177,7 @@ public class GameManager : MonoBehaviour
         totalScores[1] = adjustedBaseScore * (player2Cells / totalFilledCells);
         totalScores[2] = adjustedBaseScore * (player3Cells / totalFilledCells);
         totalScores[3] = adjustedBaseScore * (player4Cells / totalFilledCells);
+        AudioManager.Instance.PlaySFX(AudioManager.Instance.scoreIncrease); //idk whether this fits here - kl
 
         //Outdated
         /*for (int x = 0; x < gridManager.Width; x++)
