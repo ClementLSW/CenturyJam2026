@@ -38,6 +38,7 @@ public class ParcelHandler : MonoBehaviour
         if (heldParcel == null) return;
         currentRotation = (currentRotation + 1) % 4;
         ghostRenderer.ForceRefresh();
+        AudioManager.Instance.PlaySFX(AudioManager.Instance.boxRotate);
     }
 
     public void HandleRotateCCW()
@@ -45,6 +46,7 @@ public class ParcelHandler : MonoBehaviour
         if (heldParcel == null) return;
         currentRotation = (currentRotation + 3) % 4;
         ghostRenderer.ForceRefresh();
+        AudioManager.Instance.PlaySFX(AudioManager.Instance.boxRotate);
     }
     private void TryPickUp()
     {
@@ -101,6 +103,7 @@ public class ParcelHandler : MonoBehaviour
         heldParcel = wp;
         heldParcel.gameObject.SetActive(false);
         currentRotation = 0;
+        AudioManager.Instance.PlaySFX(AudioManager.Instance.boxPickup);
 
         var go = new GameObject("HeldVisual");
         heldVisual = go.AddComponent<SpriteRenderer>();
@@ -133,6 +136,8 @@ public class ParcelHandler : MonoBehaviour
                 heldParcel.ownerID = cursor.PlayerIndex;
 
                 conveyorManager.NotifyParcelPlaced(cursor.PlayerIndex); //respawn parcel
+                AudioManager.Instance.PlaySFX(AudioManager.Instance.boxDrop);
+                AudioManager.Instance.PlaySFXDelayed(AudioManager.Instance.conveyor, 1f);
 
                 CleanupHeld();
                 return;
@@ -140,6 +145,7 @@ public class ParcelHandler : MonoBehaviour
             else
             {
                 Debug.Log("Invalid placement");
+                AudioManager.Instance.PlaySFX(AudioManager.Instance.boxInvalid);
                 return;
             }
         }

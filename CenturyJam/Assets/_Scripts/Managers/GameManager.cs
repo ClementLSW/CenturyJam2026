@@ -22,6 +22,8 @@ public class GameManager : MonoBehaviour
     private int currentRound = 0;
     private float timeRemaining;
     private bool roundActive = false;
+    private bool playedTicking = false;
+    private bool playedTimeOut = false;
     private int[] totalScores;
     private int playerCount;
 
@@ -57,8 +59,23 @@ public class GameManager : MonoBehaviour
         timeRemaining -= Time.deltaTime;
         UpdateTimerUI();
 
+
+        if (timeRemaining <= 13f && !playedTicking)
+        {
+            playedTicking = true;
+            AudioManager.Instance.PlaySFX(AudioManager.Instance.ticking);
+        }
+
+        if (timeRemaining <= 1.5f && !playedTimeOut && currentRound == 3)
+        {
+            playedTimeOut = true;
+            AudioManager.Instance.PlaySFX(AudioManager.Instance.timeOut);
+        }
+
+
         if (timeRemaining <= 0f)
         {
+            AudioManager.Instance.PlaySFX(AudioManager.Instance.truckLeave);
             EndRound();
         }
     }
@@ -72,6 +89,7 @@ public class GameManager : MonoBehaviour
         gridManager.LoadTemplate(truckTemplates[templateIndex]);
 
         conveyorManager.StartRound();
+        AudioManager.Instance.PlaySFXDelayed(AudioManager.Instance.truckArrive, 1f);
 
         timeRemaining = roundDuration;
         roundActive = true;
@@ -124,6 +142,7 @@ public class GameManager : MonoBehaviour
                         if (IsFirstCellOfParcel(pos, cell.parcelID))
                         {
                             totalScores[cell.ownerID] += data.pointValue;
+                            AudioManager.Instance.PlaySFX(AudioManager.Instance.scoreIncrease);
                         }
                     }
                 }
@@ -162,6 +181,7 @@ public class GameManager : MonoBehaviour
         result += $"\nPlayer {winnerIndex + 1} wins!";
 
         finalScoreText.text = result;
+        AudioManager.Instance.PlaySFX(AudioManager.Instance.payout);
 
         // TODO: restart or return to menu on button press
     }
