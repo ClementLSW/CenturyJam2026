@@ -37,6 +37,8 @@ public class ParcelHandler : MonoBehaviour
     {
         if (heldParcel == null) return;
         currentRotation = (currentRotation + 1) % 4;
+        if (heldVisual != null)
+            heldVisual.transform.rotation = Quaternion.Euler(0, 0, -90f * currentRotation);
         ghostRenderer.ForceRefresh();
         AudioManager.Instance.PlaySFX(AudioManager.Instance.boxRotate);
     }
@@ -45,6 +47,8 @@ public class ParcelHandler : MonoBehaviour
     {
         if (heldParcel == null) return;
         currentRotation = (currentRotation + 3) % 4;
+        if (heldVisual != null)
+            heldVisual.transform.rotation = Quaternion.Euler(0, 0, -90f * currentRotation);
         ghostRenderer.ForceRefresh();
         AudioManager.Instance.PlaySFX(AudioManager.Instance.boxRotate);
     }
@@ -106,6 +110,7 @@ public class ParcelHandler : MonoBehaviour
         AudioManager.Instance.PlaySFX(AudioManager.Instance.boxPickup);
 
         var go = new GameObject("HeldVisual");
+        go.transform.rotation = Quaternion.Euler(0, 0, -90f * currentRotation);
         heldVisual = go.AddComponent<SpriteRenderer>();
         heldVisual.sprite = wp.data.parcelSprite;
         heldVisual.color = cursor.PlayerColor;
@@ -134,6 +139,23 @@ public class ParcelHandler : MonoBehaviour
 
                 heldParcel.parcelID = id;
                 heldParcel.ownerID = cursor.PlayerIndex;
+
+                // Spawn placed sprite at center of occupied cells
+                var rotated = ParcelUtility.RotateShape(heldParcel.data.shapeOffsets, currentRotation);
+                Vector2 sum = Vector2.zero;
+                foreach (var offset in rotated)
+                    sum += gridManager.GridToWorld(gridPos + offset);
+                Vector2 center = sum / rotated.Count;
+
+                var placed = new GameObject($"PlacedParcel_{id}");
+                placed.transform.position = center;
+                placed.transform.rotation = Quaternion.Euler(0, 0, -90f * currentRotation);
+                var placedSr = placed.AddComponent<SpriteRenderer>();
+                placedSr.sprite = heldParcel.data.parcelSprite;
+                placedSr.color = cursor.PlayerColor;
+                placedSr.sortingOrder = 5;
+
+                gridManager.RegisterPlacedVisual(id, placed);
 
                 conveyorManager.NotifyParcelPlaced(cursor.PlayerIndex); //respawn parcel
                 AudioManager.Instance.PlaySFX(AudioManager.Instance.boxDrop);

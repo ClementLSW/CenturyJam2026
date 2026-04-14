@@ -6,6 +6,8 @@ using UnityEngine.SceneManagement;
 
 public class SceneChangeManager : MonoBehaviour
 {
+    [SerializeField] bool isTesting;
+
     void Start()
     {
         DontDestroyOnLoad(gameObject);
@@ -26,7 +28,14 @@ public class SceneChangeManager : MonoBehaviour
                 StateManager.Instance.SetCurrentState(StateManager.GameState.MAINMENU);
                 break;
             case StateManager.GameState.GAME:
-                targetSceneName = "Game";
+                if (isTesting)
+                {
+                    targetSceneName = "Test";
+                }
+                else
+                {
+                    targetSceneName = "Game";
+                }
                 StateManager.Instance.SetCurrentState(StateManager.GameState.GAME);
                 break;
             default:

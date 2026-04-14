@@ -33,6 +33,7 @@ public class ConveyorBelt : MonoBehaviour
 
         GameObject go = new GameObject($"Parcel_{ownerID}");
         go.transform.position = waypoints[0].position;
+        go.transform.localScale = Vector3.one * data.conveyorScale;
 
         var sr = go.AddComponent<SpriteRenderer>();
         sr.sprite = data.parcelSprite;

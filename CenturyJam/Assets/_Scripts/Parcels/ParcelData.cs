@@ -6,6 +6,6 @@ public class ParcelData : ScriptableObject
 {
     public string parcelName;
     public List<Vector2Int> shapeOffsets;
-    public int pointValue;
-    public Sprite parcelSprite; // artist-drawn sprite
+    public Sprite parcelSprite;
+    public float conveyorScale = 0.5f;
 }

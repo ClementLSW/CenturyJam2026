@@ -15,5 +15,4 @@ MonoBehaviour:
   parcelName: Parcel 1
   shapeOffsets:
   - {x: 0, y: 0}
-  pointValue: 1
   parcelSprite: {fileID: 21300000, guid: 115bf7508bf5be7468f719ad9c734573, type: 3}

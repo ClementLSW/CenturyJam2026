@@ -16,6 +16,7 @@ public class GridManager : MonoBehaviour
     public int Width => width;
     public int Height => height;
     private Dictionary<int, ParcelData> parcelRegistry = new Dictionary<int, ParcelData>();
+    private Dictionary<int, GameObject> placedVisuals = new Dictionary<int, GameObject>();
 
 
     // World-space origin = this transform's position (bottom-left corner)
@@ -111,8 +112,19 @@ public class GridManager : MonoBehaviour
                 if (grid[x, y].parcelID == parcelId)
                     grid[x, y] = new CellData();
 
+        if (placedVisuals.TryGetValue(parcelId, out var visual))
+        {
+            Destroy(visual);
+            placedVisuals.Remove(parcelId);
+        }
+
         parcelRegistry.Remove(parcelId);
         RefreshVisuals();
+    }
+
+    public void RegisterPlacedVisual(int parcelId, GameObject visual)
+    {
+        placedVisuals[parcelId] = visual;
     }
 
     // --- Query ---
@@ -174,8 +186,6 @@ public class GridManager : MonoBehaviour
 
     private void RefreshVisuals()
     {
-        Color[] playerColors = { Color.red, Color.blue, Color.green, Color.yellow };
-
         for (int x = 0; x < width; x++)
         {
             for (int y = 0; y < height; y++)
@@ -185,7 +195,7 @@ public class GridManager : MonoBehaviour
                 {
                     CellState.Empty => new Color(0.9f, 0.9f, 0.9f),
                     CellState.Blocked => new Color(0.3f, 0.3f, 0.3f),
-                    CellState.Occupied => playerColors[cell.ownerID % playerColors.Length],
+                    CellState.Occupied => new Color(0.9f, 0.9f, 0.9f),
                     _ => Color.white
                 };
             }

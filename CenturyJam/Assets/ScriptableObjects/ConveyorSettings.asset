@@ -16,35 +16,35 @@ MonoBehaviour:
   slotSpacing: 1.5
   parcelPool:
   - parcel: {fileID: 11400000, guid: 6e1c844b14c474f59b0772944e9110f1, type: 2}
-    complexity: 0
-    baseWeight: 0
+    complexity: 1
+    baseWeight: 1
   - parcel: {fileID: 11400000, guid: 38ff4d8b02d7342a9990fde646a2d327, type: 2}
-    complexity: 0
-    baseWeight: 0
+    complexity: 1
+    baseWeight: 1
   - parcel: {fileID: 11400000, guid: 097f178f9f0a64b8d9f7769617cc740b, type: 2}
-    complexity: 0
-    baseWeight: 0
+    complexity: 2
+    baseWeight: 1
   - parcel: {fileID: 11400000, guid: 6f154fbab805c424c88a676aef984052, type: 2}
-    complexity: 0
-    baseWeight: 0
+    complexity: 2
+    baseWeight: 1
   - parcel: {fileID: 11400000, guid: 67096a05fbec24385b7b4dd121cf43e9, type: 2}
-    complexity: 0
-    baseWeight: 0
+    complexity: 3
+    baseWeight: 1
   - parcel: {fileID: 11400000, guid: 574634ec901494981a578da88891c492, type: 2}
-    complexity: 0
-    baseWeight: 0
+    complexity: 3
+    baseWeight: 1
   - parcel: {fileID: 11400000, guid: 790ab4a56d18745dc99d4240b8781c69, type: 2}
-    complexity: 0
-    baseWeight: 0
+    complexity: 2
+    baseWeight: 1
   - parcel: {fileID: 11400000, guid: 655a889484c204f298dc8d3aa8106ad5, type: 2}
-    complexity: 0
-    baseWeight: 0
+    complexity: 4
+    baseWeight: 1
   - parcel: {fileID: 11400000, guid: 18a393ab158344f2e920439c13dbbbe8, type: 2}
-    complexity: 0
-    baseWeight: 0
+    complexity: 4
+    baseWeight: 1
   - parcel: {fileID: 11400000, guid: aae2befc118a74f52ac5d68869e14fb9, type: 2}
-    complexity: 0
-    baseWeight: 0
+    complexity: 4
+    baseWeight: 1
   startingComplexityBias: 0.2
   maxComplexityBias: 0.8
   windowSize: 6
