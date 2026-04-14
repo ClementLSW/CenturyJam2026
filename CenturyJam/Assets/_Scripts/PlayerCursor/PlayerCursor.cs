@@ -23,17 +23,24 @@ public class PlayerCursor : MonoBehaviour
 
     public void OnInteract(InputAction.CallbackContext ctx)
     {
-        if (ctx.performed && parcelHandler != null && StateManager.Instance != null && StateManager.Instance.GetCurrentState() == StateManager.GameState.GAME) parcelHandler.HandleInteract();
+        if (StateManager.Instance == null) return;
+        if (ctx.performed && StateManager.Instance.GetCurrentState() == StateManager.GameState.MAINMENU) PlayerEnrolmentManager.Instance.TryStartGame();
+        if (parcelHandler == null) return;
+        if (ctx.performed && StateManager.Instance.GetCurrentState() == StateManager.GameState.GAME) parcelHandler.HandleInteract();
     }
 
     public void OnRotateCW(InputAction.CallbackContext ctx)
     {
-        if (ctx.performed && parcelHandler != null && StateManager.Instance != null && StateManager.Instance.GetCurrentState() == StateManager.GameState.GAME) parcelHandler.HandleRotateCW();
+        if (StateManager.Instance == null) return;
+        if (parcelHandler == null) return;
+        if (ctx.performed && StateManager.Instance.GetCurrentState() == StateManager.GameState.GAME) parcelHandler.HandleRotateCW();
     }
 
     public void OnRotateCCW(InputAction.CallbackContext ctx)
     {
-        if (ctx.performed && parcelHandler != null && StateManager.Instance != null && StateManager.Instance.GetCurrentState() == StateManager.GameState.GAME) parcelHandler.HandleRotateCCW();
+        if (StateManager.Instance == null) return;
+        if (parcelHandler == null) return;
+        if (ctx.performed && StateManager.Instance.GetCurrentState() == StateManager.GameState.GAME) parcelHandler.HandleRotateCCW();
     }
 
     public void OnPause(InputAction.CallbackContext ctx)

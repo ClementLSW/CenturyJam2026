@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -7,16 +6,22 @@ using UnityEngine.InputSystem;
 
 public class PlayerEnrolmentManager : MonoBehaviour
 {
+    public static PlayerEnrolmentManager Instance;
     [SerializeField] private GlobalVariable globalVariable;
     [SerializeField] private List<Transform> spawnPoints;
-    [SerializeField] private List<PlayerEnrolmentIndicator>  playerEnrolmentIndicators;
+    [SerializeField] private List<PlayerEnrolmentIndicator> playerEnrolmentIndicators;
     [SerializeField] private TextMeshProUGUI gameStartStatus;
     private readonly Dictionary<PlayerInput, int> _players = new();
+    private bool _allowGameStart;
     private Coroutine _countdownCoroutine;
     private SceneChangeManager _sceneChangeManager;
 
     private void Awake()
     {
+        if (Instance != null && Instance != this)
+            Destroy(this);
+        else
+            Instance = this;
         _sceneChangeManager = GetComponent<SceneChangeManager>();
     }
 
@@ -26,28 +31,36 @@ public class PlayerEnrolmentManager : MonoBehaviour
         playerEnrolmentIndicators[1].SetIndicatorColor(globalVariable.player2Color);
         playerEnrolmentIndicators[2].SetIndicatorColor(globalVariable.player3Color);
         playerEnrolmentIndicators[3].SetIndicatorColor(globalVariable.player4Color);
+        gameStartStatus.text = $"Waiting For More Players... {_players.Count}/4.";
+        
     }
 
     public void PlayerJoined(PlayerInput player)
     {
-        int newPlayerId = AddPlayerToPool(player);
+        var newPlayerId = AddPlayerToPool(player);
         if (newPlayerId != -1)
         {
             MovePlayerToStartPosition(player.transform, newPlayerId);
             SetPlayerCursorColor(player, newPlayerId);
             ActivateEnrolmentIndicator(newPlayerId);
         }
-        if (_players.Count >= 3)
-        {
-            _countdownCoroutine = StartCoroutine(CountdownToStartGame());
-        }
+        _allowGameStart = _players.Count >= 2;
+        gameStartStatus.text = _players.Count >=2?$"Waiting For More Players... {_players.Count}/4. Press A to Start Game.":$"Waiting For More Players... {_players.Count}/4.";
     }
 
     public void PlayerLeft(PlayerInput player)
     {
-        _players.Remove(player, out int removedPlayerId);
+        _players.Remove(player, out var removedPlayerId);
         DeactivateEnrolmentIndicator(removedPlayerId);
-        HaltCountdown();
+        gameStartStatus.text = _players.Count >=2?$"Waiting For More Players... {_players.Count}/4. Press A to Start Game.":$"Waiting For More Players... {_players.Count}/4.";
+        _allowGameStart = _players.Count >= 2;
+        if (!_allowGameStart) HaltCountdown();
+    }
+
+    public void TryStartGame()
+    {
+        if (_allowGameStart && _countdownCoroutine == null)
+            _countdownCoroutine = StartCoroutine(CountdownToStartGame());
     }
 
     private int GetFirstAvailablePlayerId()
@@ -67,6 +80,7 @@ public class PlayerEnrolmentManager : MonoBehaviour
             Debug.LogError("No available slots, failed to add player");
             return -1;
         }
+
         _players.Add(player, playerId);
         return playerId;
     }
@@ -94,6 +108,7 @@ public class PlayerEnrolmentManager : MonoBehaviour
                 playerColor = globalVariable.player4Color;
                 break;
         }
+
         player.GetComponent<PlayerCursor>().SetPlayerColor(playerColor);
     }
 
@@ -101,32 +116,33 @@ public class PlayerEnrolmentManager : MonoBehaviour
     {
         playerEnrolmentIndicators[playerId].ActivateIndicator();
     }
-    
+
     private void DeactivateEnrolmentIndicator(int playerId)
     {
         playerEnrolmentIndicators[playerId].DeactivateIndicator();
     }
 
-    IEnumerator CountdownToStartGame()
+    private IEnumerator CountdownToStartGame()
     {
-        float time = 6f;
+        var time = 6f;
         while (time > 0)
         {
             gameStartStatus.text = $"Game Starting In {Mathf.FloorToInt(time)}s";
             time -= Time.deltaTime;
             yield return null;
         }
+
         _sceneChangeManager.StartGame();
-        yield break;
     }
 
-    void HaltCountdown()
+    private void HaltCountdown()
     {
         if (_countdownCoroutine != null)
         {
             StopCoroutine(_countdownCoroutine);
             _countdownCoroutine = null;
         }
-        gameStartStatus.text = $"Waiting For Players...";
+
+        gameStartStatus.text = "Waiting For More Players...";
     }
 }
