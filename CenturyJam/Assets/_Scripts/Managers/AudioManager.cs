@@ -95,13 +95,33 @@ public class AudioManager : MonoBehaviour
 
     private AudioSource GetAvailableSource()
     {
+        // Reuse a free source from the pool
         foreach (var source in sfxSources)
         {
             if (!source.isPlaying)
                 return source;
         }
 
-        // fallback (reuse first)
-        return sfxSources[0];
+        // Surge: all busy — grow the pool temporarily
+        AudioSource surge = gameObject.AddComponent<AudioSource>();
+        surge.playOnAwake = false;
+        sfxSources.Add(surge);
+        return surge;
+    }
+
+    void Update()
+    {
+        // Trim surplus sources once they finish playing, down to sfxPoolSize
+        if (sfxSources.Count > sfxPoolSize)
+        {
+            for (int i = sfxSources.Count - 1; i >= sfxPoolSize; i--)
+            {
+                if (!sfxSources[i].isPlaying)
+                {
+                    Destroy(sfxSources[i]);
+                    sfxSources.RemoveAt(i);
+                }
+            }
+        }
     }
 }
