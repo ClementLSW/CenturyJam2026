@@ -22,9 +22,17 @@ public class ConveyorManager : MonoBehaviour
             return;
         }
 
-        for (int i = 0; i < playerCount; i++)
+        for (int i = 0; i < players.Length; i++)
         {
-            players[i].Initialize(i, PlayerColors[i]);
+            if (i < playerCount)
+            {
+                players[i].gameObject.SetActive(true);
+                players[i].Initialize(i, PlayerColors[i]);
+            }
+            else
+            {
+                players[i].gameObject.SetActive(false);
+            }
         }
     }
 
@@ -32,6 +40,7 @@ public class ConveyorManager : MonoBehaviour
     {
         foreach (var player in players)
         {
+            if (!player.gameObject.activeSelf) continue;
             foreach (var belt in player.GetBelts())
             {
                 belt.SpawnParcel();
@@ -54,6 +63,7 @@ public class ConveyorManager : MonoBehaviour
     {
         foreach (var player in players)
         {
+            if (!player.gameObject.activeSelf) continue;
             if (player.PlayerID == playerID)
                 return new List<ConveyorBelt>(player.GetBelts());
         }
