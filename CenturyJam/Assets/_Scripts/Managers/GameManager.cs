@@ -26,8 +26,16 @@ public class GameManager : MonoBehaviour
     private bool roundActive = false;
     private bool playedTicking = false;
     private bool playedTimeOut = false;
+    private bool playedVanLeave = false;
     private int[] totalScores;
     private int playerCount;
+
+    public GameObject Van;
+    [SerializeField] private Sprite vanSpriteA;
+    [SerializeField] private Sprite vanSpriteB;
+    public Animator vanAnimator;
+    public GameObject VanExhaust;
+
 
     private static readonly Color[] PlayerColors =
         { Color.red, Color.blue, Color.green, Color.yellow };
@@ -68,16 +76,26 @@ public class GameManager : MonoBehaviour
             AudioManager.Instance.PlaySFX(AudioManager.Instance.ticking);
         }
 
-        if (timeRemaining <= 1.5f && !playedTimeOut && currentRound == 3)
+        if (timeRemaining <= 1.5f && !playedVanLeave)
         {
-            playedTimeOut = true;
-            AudioManager.Instance.PlaySFX(AudioManager.Instance.timeOut);
+            playedVanLeave = true;
+            AudioManager.Instance.PlaySFX(AudioManager.Instance.vanLeave);
+            VanExhaust.SetActive(true);
+
+            if (currentRound == 3 && !playedTimeOut)
+            {
+                playedTimeOut = true;
+                AudioManager.Instance.PlaySFX(AudioManager.Instance.timeOut);
+            }
+
+            // delay end round slightly
+            Invoke(nameof(EndRound), 1f);
+            return;
         }
 
 
         if (timeRemaining <= 0f)
         {
-            AudioManager.Instance.PlaySFX(AudioManager.Instance.truckLeave);
             EndRound();
         }
     }
@@ -85,13 +103,18 @@ public class GameManager : MonoBehaviour
     private void StartRound()
     {
         currentRound++;
+        playedTicking = false;
+        playedVanLeave = false;
 
         // Pick a truck template
         int templateIndex = (currentRound - 1) % truckTemplates.Length;
         gridManager.LoadTemplate(truckTemplates[templateIndex]);
+        Van.GetComponent<SpriteRenderer>().sprite = UnityEngine.Random.Range(0, 2) == 0 ? vanSpriteA : vanSpriteB;
 
         conveyorManager.StartRound();
-        AudioManager.Instance.PlaySFXDelayed(AudioManager.Instance.truckArrive, 1f);
+        AudioManager.Instance.PlaySFX(AudioManager.Instance.vanArrive);
+        vanAnimator.Play("VanArrive");
+        VanExhaust.SetActive(false);
 
         timeRemaining = roundDuration;
         roundActive = true;
@@ -103,6 +126,7 @@ public class GameManager : MonoBehaviour
     private void EndRound()
     {
         roundActive = false;
+        vanAnimator.Play("VanLeave");
 
         // Tally scores from grid
         TallyRoundScores();
@@ -177,7 +201,6 @@ public class GameManager : MonoBehaviour
         totalScores[1] = adjustedBaseScore * (player2Cells / totalFilledCells);
         totalScores[2] = adjustedBaseScore * (player3Cells / totalFilledCells);
         totalScores[3] = adjustedBaseScore * (player4Cells / totalFilledCells);
-        AudioManager.Instance.PlaySFX(AudioManager.Instance.scoreIncrease); //idk whether this fits here - kl
 
         //Outdated
         /*for (int x = 0; x < gridManager.Width; x++)
