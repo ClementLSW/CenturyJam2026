@@ -31,7 +31,7 @@ public class WorldParcel : MonoBehaviour
     {
         if (isInteractable) return;
 
-        if (currentIndex >= waypoints.Length) return;
+        if (waypoints == null || currentIndex >= waypoints.Length) return;
 
         Transform target = waypoints[currentIndex];
 

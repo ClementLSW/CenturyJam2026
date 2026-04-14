@@ -122,7 +122,11 @@ public class PlayerEnrolmentManager : MonoBehaviour
 
     void HaltCountdown()
     {
-        StopCoroutine(_countdownCoroutine);
+        if (_countdownCoroutine != null)
+        {
+            StopCoroutine(_countdownCoroutine);
+            _countdownCoroutine = null;
+        }
         gameStartStatus.text = $"Waiting For Players...";
     }
 }

@@ -22,6 +22,11 @@ public class ConveyorBelt : MonoBehaviour
     public void SpawnParcel()
     {
         if (currentParcel != null) return;
+        if (settings.parcelPool == null || settings.parcelPool.Count == 0)
+        {
+            Debug.LogError("ConveyorBelt: parcelPool is empty, cannot spawn parcel.");
+            return;
+        }
 
         ParcelData data = PickParcel();
         totalSpawned++;

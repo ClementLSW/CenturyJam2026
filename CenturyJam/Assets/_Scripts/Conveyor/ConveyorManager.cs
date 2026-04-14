@@ -58,6 +58,6 @@ public class ConveyorManager : MonoBehaviour
                 return new List<ConveyorBelt>(player.GetBelts());
         }
 
-        return null;
+        return new List<ConveyorBelt>();
     }
 }

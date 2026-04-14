@@ -125,6 +125,7 @@ public class GameManager : MonoBehaviour
 
     private void EndRound()
     {
+        CancelInvoke(nameof(EndRound));
         roundActive = false;
         vanAnimator.Play("VanLeave");
 
@@ -192,15 +193,15 @@ public class GameManager : MonoBehaviour
         //Calculate Penalty
         var totalGridSquares = gridManager.Height * gridManager.Width;
         var buffer = Mathf.FloorToInt(0.1f * totalGridSquares);
-        var excessEmpty = Math.Max(totalFilledCells - totalFilledCells - buffer, 0);
+        var excessEmpty = Math.Max(totalGridSquares - totalFilledCells - buffer, 0);
         var penalty = ((float)excessEmpty / (float)totalGridSquares);
-        var adjustedBaseScore = baseRoundScore * Mathf.FloorToInt(1 - penalty);
+        var adjustedBaseScore = baseRoundScore * (1f - penalty);
 
         //Calculate individual color-ratio
-        totalScores[0] = adjustedBaseScore * (player1Cells / totalFilledCells);
-        totalScores[1] = adjustedBaseScore * (player2Cells / totalFilledCells);
-        totalScores[2] = adjustedBaseScore * (player3Cells / totalFilledCells);
-        totalScores[3] = adjustedBaseScore * (player4Cells / totalFilledCells);
+        totalScores[0] += Mathf.RoundToInt(adjustedBaseScore * ((float)player1Cells / (float)totalFilledCells));
+        totalScores[1] += Mathf.RoundToInt(adjustedBaseScore * ((float)player2Cells / (float)totalFilledCells));
+        totalScores[2] += Mathf.RoundToInt(adjustedBaseScore * ((float)player3Cells / (float)totalFilledCells));
+        totalScores[3] += Mathf.RoundToInt(adjustedBaseScore * ((float)player4Cells / (float)totalFilledCells));
 
         //Outdated
         /*for (int x = 0; x < gridManager.Width; x++)
