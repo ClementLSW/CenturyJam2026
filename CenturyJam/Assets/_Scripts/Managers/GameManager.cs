@@ -129,7 +129,8 @@ public class GameManager : MonoBehaviour
 
         // Pick a truck template
         int templateIndex = (currentRound - 1) % truckTemplates.Length;
-        gridManager.LoadTemplate(truckTemplates[templateIndex]);
+        //gridManager.LoadTemplate(truckTemplates[templateIndex]);
+        gridManager.FadeOutAndReload(truckTemplates[templateIndex]);
         Van.GetComponent<SpriteRenderer>().sprite = UnityEngine.Random.Range(0, 2) == 0 ? vanSpriteA : vanSpriteB;
 
         conveyorManager.StartRound();

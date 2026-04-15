@@ -14,6 +14,9 @@ public class ParcelHandler : MonoBehaviour
     private SpriteRenderer heldVisual;
     private int currentRotation;
 
+    [SerializeField] private GameObject placeEffect;
+
+
     void Start()
     {
         cursor = GetComponent<PlayerCursor>();
@@ -160,6 +163,7 @@ public class ParcelHandler : MonoBehaviour
                 conveyorManager.NotifyParcelPlaced(cursor.PlayerIndex); //respawn parcel
                 AudioManager.Instance.PlaySFX(AudioManager.Instance.boxDrop);
                 AudioManager.Instance.PlaySFXDelayed(AudioManager.Instance.conveyor, 1f);
+                Instantiate (placeEffect, gameObject.transform.position, Quaternion.identity);
 
                 CleanupHeld();
                 return;

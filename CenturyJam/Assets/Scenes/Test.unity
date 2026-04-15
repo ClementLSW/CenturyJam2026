@@ -678,6 +678,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1209617210}
     - target: {fileID: 960605523745668120, guid: 5ec8a84cb337045cca4574aa9d51767c, type: 3}
+      propertyPath: placeEffect
+      value: 
+      objectReference: {fileID: 5972723565303057941, guid: 3fe9d23d4ae73c54f98d694149a492ee, type: 3}
+    - target: {fileID: 960605523745668120, guid: 5ec8a84cb337045cca4574aa9d51767c, type: 3}
       propertyPath: conveyorManager
       value: 
       objectReference: {fileID: 138730606}
@@ -10473,6 +10477,8 @@ MonoBehaviour:
   cellSize: 1
   template: {fileID: 11400000, guid: 46bcf0ef4d2c840568cf5713fc9fe0a9, type: 2}
   cellSprite: {fileID: 7482667652216324306, guid: 48e93eef0688c4a259cb0eddcd8661f7, type: 3}
+  fadeDuration: 0.5
+  rippleSpeed: 0.08
 --- !u!4 &1209617211
 Transform:
   m_ObjectHideFlags: 0

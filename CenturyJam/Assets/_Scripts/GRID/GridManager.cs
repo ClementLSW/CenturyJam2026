@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 using System.Collections.Generic;
 
 public class GridManager : MonoBehaviour
@@ -6,7 +7,11 @@ public class GridManager : MonoBehaviour
     [Header("Grid Config")]
     [SerializeField] private float cellSize = 1f;
     [SerializeField] private TruckTemplate template;
-    [SerializeField] private Sprite cellSprite; // white square sprite
+    [SerializeField] private Sprite cellSprite;
+
+    [Header("Fade Settings")]
+    [SerializeField] private float fadeDuration = 1.5f;
+    [SerializeField] private float rippleSpeed = 0.08f;
 
     // Data layer
     private CellData[,] grid;
@@ -15,19 +20,16 @@ public class GridManager : MonoBehaviour
 
     public int Width => width;
     public int Height => height;
+
     private Dictionary<int, ParcelData> parcelRegistry = new Dictionary<int, ParcelData>();
     private Dictionary<int, GameObject> placedVisuals = new Dictionary<int, GameObject>();
 
+    private SpriteRenderer[,] cellRenderers;
 
-    // World-space origin = this transform's position (bottom-left corner)
     private Vector2 Origin => (Vector2)transform.position;
 
     private int nextparcelId = 1;
 
-    private void Start()
-    {
-        //LoadTemplate(template);
-    }
 
     public void LoadTemplate(TruckTemplate t)
     {
@@ -35,7 +37,6 @@ public class GridManager : MonoBehaviour
         height = t.height;
         grid = new CellData[width, height];
 
-        // Mark blocked cells
         foreach (var blocked in t.blockedCells)
         {
             if (InBounds(blocked))
@@ -43,9 +44,80 @@ public class GridManager : MonoBehaviour
         }
 
         SpawnVisuals();
+
+        // Ripple IN
+        SetGridAlpha(0f);
+        StartCoroutine(RippleFade(0f, 1f));
     }
 
-    // --- Coordinate conversion ---
+    public void FadeOutAndReload(TruckTemplate t)
+    {
+        StartCoroutine(FadeOutThenReload(t));
+    }
+
+    private IEnumerator FadeOutThenReload(TruckTemplate t)
+    {
+        yield return new WaitForSeconds(0.5f);
+        yield return StartCoroutine(RippleFade(1f, 0f));
+        LoadTemplate(t);
+    }
+
+    private IEnumerator RippleFade(float startAlpha, float endAlpha)
+    {
+        float time = 0f;
+
+        // Ripple origin (center of grid)
+        Vector2 center = new Vector2(width / 2f, height / 2f);
+
+        while (time < fadeDuration)
+        {
+            float globalT = time / fadeDuration;
+
+            for (int x = 0; x < width; x++)
+            {
+                for (int y = 0; y < height; y++)
+                {
+                    var sr = cellRenderers[x, y];
+                    if (sr == null) continue;
+
+                    float dist = Vector2.Distance(new Vector2(x, y), center);
+
+                    float delay = dist * rippleSpeed;
+
+                    float localT = Mathf.Clamp01(globalT - delay);
+
+                    float alpha = Mathf.Lerp(startAlpha, endAlpha, localT);
+
+                    Color c = sr.color;
+                    c.a = alpha;
+                    sr.color = c;
+                }
+            }
+
+            time += Time.deltaTime;
+            yield return null;
+        }
+
+        SetGridAlpha(endAlpha);
+    }
+
+    private void SetGridAlpha(float alpha)
+    {
+        if (cellRenderers == null) return;
+
+        for (int x = 0; x < width; x++)
+        {
+            for (int y = 0; y < height; y++)
+            {
+                var sr = cellRenderers[x, y];
+                if (sr == null) continue;
+
+                Color c = sr.color;
+                c.a = alpha;
+                sr.color = c;
+            }
+        }
+    }
 
     public bool IsInsideBounds(Vector2 worldPos)
     {
@@ -72,22 +144,23 @@ public class GridManager : MonoBehaviour
         );
     }
 
-    // --- Placement logic ---
-
     public bool CanPlace(List<Vector2Int> shapeOffsets, Vector2Int gridPos, int rotation)
     {
         var rotated = ParcelUtility.RotateShape(shapeOffsets, rotation);
+
         foreach (var offset in rotated)
         {
             Vector2Int cell = gridPos + offset;
+
             if (!InBounds(cell)) return false;
             if (grid[cell.x, cell.y].state != CellState.Empty) return false;
         }
+
         return true;
     }
 
     public int PlaceParcel(List<Vector2Int> shapeOffsets, Vector2Int gridPos,
-                        int rotation, int ownerID, ParcelData data)
+                          int rotation, int ownerID, ParcelData data)
     {
         var rotated = ParcelUtility.RotateShape(shapeOffsets, rotation);
         int parcelId = nextparcelId++;
@@ -95,6 +168,7 @@ public class GridManager : MonoBehaviour
         foreach (var offset in rotated)
         {
             Vector2Int cell = gridPos + offset;
+
             grid[cell.x, cell.y].state = CellState.Occupied;
             grid[cell.x, cell.y].ownerID = ownerID;
             grid[cell.x, cell.y].parcelID = parcelId;
@@ -102,15 +176,20 @@ public class GridManager : MonoBehaviour
 
         parcelRegistry[parcelId] = data;
         RefreshVisuals();
+
         return parcelId;
     }
 
     public void RemoveParcel(int parcelId)
     {
         for (int x = 0; x < width; x++)
+        {
             for (int y = 0; y < height; y++)
+            {
                 if (grid[x, y].parcelID == parcelId)
                     grid[x, y] = new CellData();
+            }
+        }
 
         if (placedVisuals.TryGetValue(parcelId, out var visual))
         {
@@ -127,11 +206,12 @@ public class GridManager : MonoBehaviour
         placedVisuals[parcelId] = visual;
     }
 
-    // --- Query ---
 
     public CellData GetCell(Vector2Int gridPos)
     {
-        if (!InBounds(gridPos)) return new CellData { state = CellState.Blocked };
+        if (!InBounds(gridPos))
+            return new CellData { state = CellState.Blocked };
+
         return grid[gridPos.x, gridPos.y];
     }
 
@@ -139,6 +219,7 @@ public class GridManager : MonoBehaviour
     {
         if (!InBounds(gridPos)) return -1;
         if (grid[gridPos.x, gridPos.y].state != CellState.Occupied) return -1;
+
         return grid[gridPos.x, gridPos.y].parcelID;
     }
 
@@ -146,21 +227,19 @@ public class GridManager : MonoBehaviour
     {
         int id = GetParcelIdAt(gridPos);
         if (id == -1) return null;
+
         return parcelRegistry.ContainsKey(id) ? parcelRegistry[id] : null;
     }
 
     private bool InBounds(Vector2Int pos)
     {
-        return pos.x >= 0 && pos.x < width && pos.y >= 0 && pos.y < height;
+        return pos.x >= 0 && pos.x < width &&
+               pos.y >= 0 && pos.y < height;
     }
 
-    // --- Visuals ---
-
-    private SpriteRenderer[,] cellRenderers;
 
     private void SpawnVisuals()
     {
-        // Clear existing
         foreach (Transform child in transform)
             Destroy(child.gameObject);
 
@@ -173,10 +252,11 @@ public class GridManager : MonoBehaviour
                 var go = new GameObject($"Cell_{x}_{y}");
                 go.transform.parent = transform;
                 go.transform.position = GridToWorld(new Vector2Int(x, y));
-                go.transform.localScale = Vector3.one * cellSize * 0.95f; // slight gap
+                go.transform.localScale = Vector3.one * cellSize * 0.95f;
 
                 var sr = go.AddComponent<SpriteRenderer>();
                 sr.sprite = cellSprite;
+
                 cellRenderers[x, y] = sr;
             }
         }
@@ -191,13 +271,19 @@ public class GridManager : MonoBehaviour
             for (int y = 0; y < height; y++)
             {
                 var cell = grid[x, y];
-                cellRenderers[x, y].color = cell.state switch
+
+                Color baseColor = cell.state switch
                 {
                     CellState.Empty => new Color(0.9f, 0.9f, 0.9f),
                     CellState.Blocked => new Color(0.3f, 0.3f, 0.3f),
                     CellState.Occupied => new Color(0.9f, 0.9f, 0.9f),
                     _ => Color.white
                 };
+
+                // preserve alpha for ripple
+                baseColor.a = cellRenderers[x, y].color.a;
+
+                cellRenderers[x, y].color = baseColor;
             }
         }
     }
