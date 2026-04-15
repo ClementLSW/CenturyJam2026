@@ -93,6 +93,7 @@ public class ParcelHandler : MonoBehaviour
             {
                 CellData cell = gridManager.GetCell(gridPos);
                 ParcelData data = gridManager.GetParcelDataAt(gridPos);
+                Color color = gridManager.GetParcelColorAt(gridPos);
                 int originalOwner = cell.ownerID;
 
                 gridManager.RemoveParcel(parcelId);
@@ -104,6 +105,7 @@ public class ParcelHandler : MonoBehaviour
                 wp.data = data;
                 wp.ownerID = originalOwner;
                 wp.parcelID = parcelId;
+                wp.parcelColor = color;
 
                 PickUp(wp);
                 return;
@@ -122,7 +124,7 @@ public class ParcelHandler : MonoBehaviour
         go.transform.rotation = Quaternion.Euler(0, 0, -90f * currentRotation);
         heldVisual = go.AddComponent<SpriteRenderer>();
         heldVisual.sprite = wp.data.parcelSprite;
-        heldVisual.color = cursor.PlayerColor;
+        heldVisual.color = wp.parcelColor;
         heldVisual.sortingOrder = 10;
     }
 
@@ -143,11 +145,11 @@ public class ParcelHandler : MonoBehaviour
                     heldParcel.data.shapeOffsets,
                     gridPos,
                     currentRotation,
-                    cursor.PlayerIndex,
-                    heldParcel.data);
+                    heldParcel.ownerID,
+                    heldParcel.data,
+                    heldParcel.parcelColor);
 
                 heldParcel.parcelID = id;
-                heldParcel.ownerID = cursor.PlayerIndex;
 
                 // Spawn placed sprite at center of occupied cells
                 var rotated = ParcelUtility.RotateShape(heldParcel.data.shapeOffsets, currentRotation);
@@ -161,7 +163,7 @@ public class ParcelHandler : MonoBehaviour
                 placed.transform.rotation = Quaternion.Euler(0, 0, -90f * currentRotation);
                 var placedSr = placed.AddComponent<SpriteRenderer>();
                 placedSr.sprite = heldParcel.data.parcelSprite;
-                placedSr.color = cursor.PlayerColor;
+                placedSr.color = heldParcel.parcelColor;
                 placedSr.sortingOrder = 5;
 
                 gridManager.RegisterPlacedVisual(id, placed);

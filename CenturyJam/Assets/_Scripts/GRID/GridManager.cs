@@ -22,6 +22,7 @@ public class GridManager : MonoBehaviour
     public int Height => height;
 
     private Dictionary<int, ParcelData> parcelRegistry = new Dictionary<int, ParcelData>();
+    private Dictionary<int, Color> parcelColorRegistry = new Dictionary<int, Color>();
     private Dictionary<int, GameObject> placedVisuals = new Dictionary<int, GameObject>();
 
     private SpriteRenderer[,] cellRenderers;
@@ -165,7 +166,7 @@ public class GridManager : MonoBehaviour
     }
 
     public int PlaceParcel(List<Vector2Int> shapeOffsets, Vector2Int gridPos,
-                          int rotation, int ownerID, ParcelData data)
+                          int rotation, int ownerID, ParcelData data, Color parcelColor)
     {
         var rotated = ParcelUtility.RotateShape(shapeOffsets, rotation);
         int parcelId = nextparcelId++;
@@ -180,6 +181,7 @@ public class GridManager : MonoBehaviour
         }
 
         parcelRegistry[parcelId] = data;
+        parcelColorRegistry[parcelId] = parcelColor;
         RefreshVisuals();
 
         return parcelId;
@@ -203,6 +205,7 @@ public class GridManager : MonoBehaviour
         }
 
         parcelRegistry.Remove(parcelId);
+        parcelColorRegistry.Remove(parcelId);
         RefreshVisuals();
     }
 
@@ -234,6 +237,14 @@ public class GridManager : MonoBehaviour
         if (id == -1) return null;
 
         return parcelRegistry.ContainsKey(id) ? parcelRegistry[id] : null;
+    }
+
+    public Color GetParcelColorAt(Vector2Int gridPos)
+    {
+        int id = GetParcelIdAt(gridPos);
+        if (id == -1) return Color.white;
+
+        return parcelColorRegistry.ContainsKey(id) ? parcelColorRegistry[id] : Color.white;
     }
 
     private bool InBounds(Vector2Int pos)

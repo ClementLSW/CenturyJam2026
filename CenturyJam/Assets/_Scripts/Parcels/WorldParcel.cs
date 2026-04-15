@@ -5,6 +5,7 @@ public class WorldParcel : MonoBehaviour
     public ParcelData data;
     public int ownerID;
     public int parcelID = -1;
+    public Color parcelColor = Color.white;
 
     private ConveyorBelt sourceBelt;
     private Transform[] waypoints;

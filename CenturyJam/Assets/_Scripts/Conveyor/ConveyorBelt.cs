@@ -46,6 +46,8 @@ public class ConveyorBelt : MonoBehaviour
 
         var parcel = go.AddComponent<WorldParcel>();
         parcel.Initialize(this, data, waypoints, moveSpeed);
+        parcel.ownerID = ownerID;
+        parcel.parcelColor = playerColor;
 
         currentParcel = parcel;
     }
