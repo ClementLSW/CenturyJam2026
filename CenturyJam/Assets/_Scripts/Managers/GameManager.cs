@@ -220,10 +220,9 @@ public class GameManager : MonoBehaviour
         var adjustedBaseScore = baseRoundScore * (1f - penalty);
 
         //Calculate individual color-ratio
-        totalScores[0] += Mathf.RoundToInt(adjustedBaseScore * ((float)player1Cells / (float)totalFilledCells));
-        totalScores[1] += Mathf.RoundToInt(adjustedBaseScore * ((float)player2Cells / (float)totalFilledCells));
-        totalScores[2] += Mathf.RoundToInt(adjustedBaseScore * ((float)player3Cells / (float)totalFilledCells));
-        totalScores[3] += Mathf.RoundToInt(adjustedBaseScore * ((float)player4Cells / (float)totalFilledCells));
+        int[] playerCells = { player1Cells, player2Cells, player3Cells, player4Cells };
+        for (int i = 0; i < playerCount; i++)
+            totalScores[i] += Mathf.RoundToInt(adjustedBaseScore * ((float)playerCells[i] / (float)totalFilledCells));
 
         //Outdated
         /*for (int x = 0; x < gridManager.Width; x++)
