@@ -151,12 +151,19 @@ public class ParcelHandler : MonoBehaviour
 
                 heldParcel.parcelID = id;
 
-                // Spawn placed sprite at center of occupied cells
+                // Spawn placed sprite at bounding box centre of occupied cells
                 var rotated = ParcelUtility.RotateShape(heldParcel.data.shapeOffsets, currentRotation);
-                Vector2 sum = Vector2.zero;
+                int minX = int.MaxValue, minY = int.MaxValue;
+                int maxX = int.MinValue, maxY = int.MinValue;
                 foreach (var offset in rotated)
-                    sum += gridManager.GridToWorld(gridPos + offset);
-                Vector2 center = sum / rotated.Count;
+                {
+                    if (offset.x < minX) minX = offset.x;
+                    if (offset.y < minY) minY = offset.y;
+                    if (offset.x > maxX) maxX = offset.x;
+                    if (offset.y > maxY) maxY = offset.y;
+                }
+                Vector2 center = (gridManager.GridToWorld(gridPos + new Vector2Int(minX, minY)) +
+                                  gridManager.GridToWorld(gridPos + new Vector2Int(maxX, maxY))) * 0.5f;
 
                 var placed = new GameObject($"PlacedParcel_{id}");
                 placed.transform.position = center;
