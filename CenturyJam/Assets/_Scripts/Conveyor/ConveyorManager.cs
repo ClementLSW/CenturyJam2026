@@ -10,7 +10,7 @@ public class ConveyorManager : MonoBehaviour
 
     void Awake()
     {
-        players = FindObjectsOfType<PlayerConveyorGroup>();
+        players = FindObjectsByType<PlayerConveyorGroup>(FindObjectsSortMode.None);
     }
 
     public void SetupBelts(int playerCount)

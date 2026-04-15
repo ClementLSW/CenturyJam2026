@@ -156,7 +156,7 @@ public class GameManager : MonoBehaviour
         UpdateScoreUI();
 
         // Force drop any held parcels
-        foreach (var handler in FindObjectsOfType<ParcelHandler>())
+        foreach (var handler in FindObjectsByType<ParcelHandler>(FindObjectsSortMode.None))
         {
             handler.CleanupHeld();
         }

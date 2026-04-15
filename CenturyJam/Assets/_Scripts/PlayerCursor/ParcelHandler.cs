@@ -21,7 +21,7 @@ public class ParcelHandler : MonoBehaviour
     {
         cursor = GetComponent<PlayerCursor>();
         ghostRenderer = GetComponent<GhostRenderer>();
-        conveyorManager = FindObjectOfType<ConveyorManager>();
+        conveyorManager = FindAnyObjectByType<ConveyorManager>();
     }
 
     public bool IsHolding => heldParcel != null;
