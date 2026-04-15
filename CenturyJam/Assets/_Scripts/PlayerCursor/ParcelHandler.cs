@@ -169,7 +169,7 @@ public class ParcelHandler : MonoBehaviour
                 conveyorManager.NotifyParcelPlaced(cursor.PlayerIndex); //respawn parcel
                 AudioManager.Instance.PlaySFX(AudioManager.Instance.boxDrop);
                 AudioManager.Instance.PlaySFXDelayed(AudioManager.Instance.conveyor, 1f);
-                Instantiate (placeEffect, gameObject.transform.position, Quaternion.identity);
+                if (placeEffect != null) Instantiate (placeEffect, gameObject.transform.position, Quaternion.identity);
 
                 CleanupHeld();
                 return;

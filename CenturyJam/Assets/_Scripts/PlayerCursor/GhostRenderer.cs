@@ -18,7 +18,7 @@ public class GhostRenderer : MonoBehaviour
         handler = GetComponent<ParcelHandler>();
         cursor = GetComponent<PlayerCursor>();
 
-        ghostVisual = Instantiate(ghostParcelPrefab);
+        ghostVisual = Instantiate(ghostParcelPrefab, transform);
         ghostVisual.gameObject.SetActive(false);
     }
 
