@@ -128,8 +128,8 @@ public class GridManager : MonoBehaviour
     public bool IsInsideBounds(Vector2 worldPos)
     {
         Vector2 local = worldPos - Origin;
-        int x = Mathf.RoundToInt(local.x / cellSize);
-        int y = Mathf.RoundToInt(local.y / cellSize);
+        int x = Mathf.FloorToInt(local.x / cellSize);
+        int y = Mathf.FloorToInt(local.y / cellSize);
         return x >= 0 && x < width && y >= 0 && y < height;
     }
 
@@ -137,8 +137,8 @@ public class GridManager : MonoBehaviour
     {
         Vector2 local = worldPos - Origin;
         return new Vector2Int(
-            Mathf.RoundToInt(local.x / cellSize),
-            Mathf.RoundToInt(local.y / cellSize)
+            Mathf.FloorToInt(local.x / cellSize),
+            Mathf.FloorToInt(local.y / cellSize)
         );
     }
 
