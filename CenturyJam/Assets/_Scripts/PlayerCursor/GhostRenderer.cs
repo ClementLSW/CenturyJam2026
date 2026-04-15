@@ -1,15 +1,15 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class GhostRenderer : MonoBehaviour
 {
-    [SerializeField] private ParcelVisual ghostParcelPrefab;
     [SerializeField] private GridManager gridManager;
 
     private ParcelHandler handler;
     private PlayerCursor cursor;
-    private ParcelVisual ghostVisual;
     private bool ghostActive;
     private Vector2Int lastSnappedCell;
+    private int lastRotation;
     private Animator _handSpriteAnimator;
 
     void Start()
@@ -17,14 +17,12 @@ public class GhostRenderer : MonoBehaviour
         _handSpriteAnimator = GetComponent<Animator>();
         handler = GetComponent<ParcelHandler>();
         cursor = GetComponent<PlayerCursor>();
-
-        ghostVisual = Instantiate(ghostParcelPrefab, transform);
-        ghostVisual.gameObject.SetActive(false);
     }
 
     void Update()
     {
         _handSpriteAnimator.SetBool("isHeld", handler.IsHolding);
+
         if (!handler.IsHolding)
         {
             HideGhost();
@@ -34,17 +32,13 @@ public class GhostRenderer : MonoBehaviour
         if (gridManager.IsInsideBounds(transform.position))
         {
             Vector2Int snapped = gridManager.WorldToGrid(transform.position);
+            int rotation = handler.CurrentRotation;
 
-            if (!ghostActive)
+            if (!ghostActive || snapped != lastSnappedCell || rotation != lastRotation)
             {
-                ghostVisual.gameObject.SetActive(true);
                 ghostActive = true;
-                lastSnappedCell = new Vector2Int(-999, -999);
-            }
-
-            if (snapped != lastSnappedCell)
-            {
                 lastSnappedCell = snapped;
+                lastRotation = rotation;
                 Refresh(snapped);
             }
         }
@@ -63,21 +57,22 @@ public class GhostRenderer : MonoBehaviour
 
     private void Refresh(Vector2Int snapped)
     {
-        ghostVisual.transform.position = gridManager.GridToWorld(snapped);
-        ghostVisual.Build(handler.HeldData, handler.CurrentRotation, cursor.PlayerColor);
+        var rotated = ParcelUtility.RotateShape(handler.HeldData.shapeOffsets, handler.CurrentRotation);
+        var cells = new List<Vector2Int>();
+        foreach (var offset in rotated)
+            cells.Add(snapped + offset);
 
-        bool valid = gridManager.CanPlace(
-            handler.HeldData.shapeOffsets, snapped, handler.CurrentRotation);
-        ghostVisual.SetColor(valid
-            ? new Color(0, 1, 0, 0.4f)
-            : new Color(1, 0, 0, 0.4f));
+        Color playerColor = cursor.PlayerColor;
+        playerColor.a = 1f; // cells are fully tinted — no transparency needed
+
+        gridManager.SetGhostPreview(cursor.PlayerIndex, cells, playerColor);
     }
 
     private void HideGhost()
     {
         if (ghostActive)
         {
-            ghostVisual.gameObject.SetActive(false);
+            gridManager.ClearGhostPreview(cursor.PlayerIndex);
             ghostActive = false;
         }
     }

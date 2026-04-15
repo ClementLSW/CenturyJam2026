@@ -26,6 +26,11 @@ public class GridManager : MonoBehaviour
 
     private SpriteRenderer[,] cellRenderers;
 
+    // Ghost preview: maps ownerId -> list of grid cells being previewed, and the player's color
+    private Dictionary<int, (List<Vector2Int> cells, Color color)> ghostPreviews = new Dictionary<int, (List<Vector2Int>, Color)>();
+
+    private static readonly Color WarningColor = new Color(1f, 0.5f, 0f); // orange
+
     private Vector2 Origin => (Vector2)transform.position;
 
     private int nextparcelId = 1;
@@ -264,13 +269,39 @@ public class GridManager : MonoBehaviour
         RefreshVisuals();
     }
 
+    public void SetGhostPreview(int ownerId, List<Vector2Int> cells, Color playerColor)
+    {
+        ghostPreviews[ownerId] = (cells, playerColor);
+        RefreshVisuals();
+    }
+
+    public void ClearGhostPreview(int ownerId)
+    {
+        if (ghostPreviews.Remove(ownerId))
+            RefreshVisuals();
+    }
+
     private void RefreshVisuals()
     {
+        // Build a map of ghost occupancy per cell: ownerId -> color
+        // Used to detect overlap between players' ghosts
+        var ghostMap = new Dictionary<Vector2Int, List<(int ownerId, Color color)>>();
+        foreach (var kv in ghostPreviews)
+        {
+            foreach (var cell in kv.Value.cells)
+            {
+                if (!ghostMap.ContainsKey(cell))
+                    ghostMap[cell] = new List<(int, Color)>();
+                ghostMap[cell].Add((kv.Key, kv.Value.color));
+            }
+        }
+
         for (int x = 0; x < width; x++)
         {
             for (int y = 0; y < height; y++)
             {
                 var cell = grid[x, y];
+                var pos = new Vector2Int(x, y);
 
                 Color baseColor = cell.state switch
                 {
@@ -279,6 +310,12 @@ public class GridManager : MonoBehaviour
                     CellState.Occupied => new Color(0.9f, 0.9f, 0.9f),
                     _ => Color.white
                 };
+
+                if (ghostMap.TryGetValue(pos, out var owners))
+                {
+                    bool conflict = owners.Count > 1 || cell.state == CellState.Occupied || cell.state == CellState.Blocked;
+                    baseColor = conflict ? WarningColor : owners[0].color;
+                }
 
                 // preserve alpha for ripple
                 baseColor.a = cellRenderers[x, y].color.a;
