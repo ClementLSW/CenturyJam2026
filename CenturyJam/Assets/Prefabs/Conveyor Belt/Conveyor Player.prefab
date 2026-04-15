@@ -9,6 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3910410132426081226}
+  - component: {fileID: 7898165959629496596}
   m_Layer: 0
   m_Name: Conveyor Player
   m_TagString: Untagged
@@ -41,6 +42,19 @@ Transform:
   - {fileID: 5565895855603295586}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7898165959629496596
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3652341880376317103}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2364e1029c4534f07b1a78e13a3b2f9e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
+  startingPositionOffset: {x: 0, y: 0, z: 0}
 --- !u!1001 &1003643073881036511
 PrefabInstance:
   m_ObjectHideFlags: 0

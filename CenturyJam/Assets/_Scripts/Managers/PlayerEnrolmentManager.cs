@@ -10,6 +10,7 @@ public class PlayerEnrolmentManager : MonoBehaviour
     [SerializeField] private GlobalVariable globalVariable;
     [SerializeField] private List<Transform> spawnPoints;
     [SerializeField] private List<PlayerEnrolmentIndicator> playerEnrolmentIndicators;
+    [SerializeField] private List<ConveyorMenuVisual> conveyors;
     [SerializeField] private TextMeshProUGUI gameStartStatus;
     private readonly Dictionary<PlayerInput, int> _players = new();
     private bool _allowGameStart;
@@ -51,6 +52,7 @@ public class PlayerEnrolmentManager : MonoBehaviour
     public void PlayerLeft(PlayerInput player)
     {
         _players.Remove(player, out var removedPlayerId);
+        conveyors[removedPlayerId].Disappear();
         DeactivateEnrolmentIndicator(removedPlayerId);
         gameStartStatus.text = _players.Count >=2?$"Waiting For More Players... {_players.Count}/4. Press A to Start Game.":$"Waiting For More Players... {_players.Count}/4.";
         _allowGameStart = _players.Count >= 2;
@@ -81,6 +83,7 @@ public class PlayerEnrolmentManager : MonoBehaviour
             return -1;
         }
 
+        conveyors[playerId].Appear();
         _players.Add(player, playerId);
         return playerId;
     }
