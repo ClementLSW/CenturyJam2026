@@ -10,9 +10,11 @@ public class GhostRenderer : MonoBehaviour
     private ParcelVisual ghostVisual;
     private bool ghostActive;
     private Vector2Int lastSnappedCell;
+    private Animator _handSpriteAnimator;
 
     void Start()
     {
+        _handSpriteAnimator = GetComponent<Animator>();
         handler = GetComponent<ParcelHandler>();
         cursor = GetComponent<PlayerCursor>();
 
@@ -22,6 +24,7 @@ public class GhostRenderer : MonoBehaviour
 
     void Update()
     {
+        _handSpriteAnimator.SetBool("isHeld", handler.IsHolding);
         if (!handler.IsHolding)
         {
             HideGhost();

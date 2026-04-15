@@ -9,6 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3910410132426081226}
+  - component: {fileID: 7898165959629496596}
   m_Layer: 0
   m_Name: Conveyor Player
   m_TagString: Untagged
@@ -41,6 +42,19 @@ Transform:
   - {fileID: 5565895855603295586}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7898165959629496596
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3652341880376317103}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2364e1029c4534f07b1a78e13a3b2f9e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
+  startingPositionOffset: {x: 0, y: 0, z: 0}
 --- !u!1001 &1003643073881036511
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -49,18 +63,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 3910410132426081226}
     m_Modifications:
-    - target: {fileID: 5113616251171144201, guid: 9f107c971f57b4239b2aa76084ac8fcc, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5113616251171144201, guid: 9f107c971f57b4239b2aa76084ac8fcc, type: 3}
-      propertyPath: m_LocalScale.y
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5113616251171144201, guid: 9f107c971f57b4239b2aa76084ac8fcc, type: 3}
-      propertyPath: m_LocalScale.z
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 5113616251171144201, guid: 9f107c971f57b4239b2aa76084ac8fcc, type: 3}
       propertyPath: m_LocalPosition.x
       value: 7
@@ -101,58 +103,20 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 5113616251171144201, guid: 9f107c971f57b4239b2aa76084ac8fcc, type: 3}
-      propertyPath: m_ConstrainProportionsScale
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 7142814733106946379, guid: 9f107c971f57b4239b2aa76084ac8fcc, type: 3}
       propertyPath: m_Name
       value: Conveyor Straight_4
       objectReference: {fileID: 0}
-    - target: {fileID: 7142814733106946379, guid: 9f107c971f57b4239b2aa76084ac8fcc, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 7142814733106946379, guid: 9f107c971f57b4239b2aa76084ac8fcc, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 6020858714147830553}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9f107c971f57b4239b2aa76084ac8fcc, type: 3}
 --- !u!4 &5411812646394352854 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5113616251171144201, guid: 9f107c971f57b4239b2aa76084ac8fcc, type: 3}
   m_PrefabInstance: {fileID: 1003643073881036511}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &7984257793566832532 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 7142814733106946379, guid: 9f107c971f57b4239b2aa76084ac8fcc, type: 3}
-  m_PrefabInstance: {fileID: 1003643073881036511}
-  m_PrefabAsset: {fileID: 0}
---- !u!95 &6020858714147830553
-Animator:
-  serializedVersion: 7
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7984257793566832532}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 110d167fe382e423da0153f00aa588f1, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_AnimatePhysics: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
 --- !u!1001 &3475158674525406608
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -161,18 +125,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 3910410132426081226}
     m_Modifications:
-    - target: {fileID: 2165680732172970367, guid: 3555d5be577574cf0ace09735e2ad502, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2165680732172970367, guid: 3555d5be577574cf0ace09735e2ad502, type: 3}
-      propertyPath: m_LocalScale.y
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2165680732172970367, guid: 3555d5be577574cf0ace09735e2ad502, type: 3}
-      propertyPath: m_LocalScale.z
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 2165680732172970367, guid: 3555d5be577574cf0ace09735e2ad502, type: 3}
       propertyPath: m_LocalPosition.x
       value: 2
@@ -213,58 +165,20 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 2165680732172970367, guid: 3555d5be577574cf0ace09735e2ad502, type: 3}
-      propertyPath: m_ConstrainProportionsScale
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 5063007104829611965, guid: 3555d5be577574cf0ace09735e2ad502, type: 3}
       propertyPath: m_Name
       value: Conveyor T Junction_1
       objectReference: {fileID: 0}
-    - target: {fileID: 5063007104829611965, guid: 3555d5be577574cf0ace09735e2ad502, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 5063007104829611965, guid: 3555d5be577574cf0ace09735e2ad502, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1769499616435890430}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3555d5be577574cf0ace09735e2ad502, type: 3}
 --- !u!4 &3329344574318947567 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2165680732172970367, guid: 3555d5be577574cf0ace09735e2ad502, type: 3}
   m_PrefabInstance: {fileID: 3475158674525406608}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &8536947228140476973 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5063007104829611965, guid: 3555d5be577574cf0ace09735e2ad502, type: 3}
-  m_PrefabInstance: {fileID: 3475158674525406608}
-  m_PrefabAsset: {fileID: 0}
---- !u!95 &1769499616435890430
-Animator:
-  serializedVersion: 7
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8536947228140476973}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 5aecb77b4d6204bffb5d11da1696d134, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_AnimatePhysics: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
 --- !u!1001 &4705094450294505918
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -273,18 +187,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 3910410132426081226}
     m_Modifications:
-    - target: {fileID: 5113616251171144201, guid: 9f107c971f57b4239b2aa76084ac8fcc, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5113616251171144201, guid: 9f107c971f57b4239b2aa76084ac8fcc, type: 3}
-      propertyPath: m_LocalScale.y
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5113616251171144201, guid: 9f107c971f57b4239b2aa76084ac8fcc, type: 3}
-      propertyPath: m_LocalScale.z
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 5113616251171144201, guid: 9f107c971f57b4239b2aa76084ac8fcc, type: 3}
       propertyPath: m_LocalPosition.x
       value: -3
@@ -325,58 +227,20 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 5113616251171144201, guid: 9f107c971f57b4239b2aa76084ac8fcc, type: 3}
-      propertyPath: m_ConstrainProportionsScale
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 7142814733106946379, guid: 9f107c971f57b4239b2aa76084ac8fcc, type: 3}
       propertyPath: m_Name
       value: Conveyor Straight_1
       objectReference: {fileID: 0}
-    - target: {fileID: 7142814733106946379, guid: 9f107c971f57b4239b2aa76084ac8fcc, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 7142814733106946379, guid: 9f107c971f57b4239b2aa76084ac8fcc, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 237803274671480288}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9f107c971f57b4239b2aa76084ac8fcc, type: 3}
 --- !u!4 &557580602083099575 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5113616251171144201, guid: 9f107c971f57b4239b2aa76084ac8fcc, type: 3}
   m_PrefabInstance: {fileID: 4705094450294505918}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &2480280935358226677 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 7142814733106946379, guid: 9f107c971f57b4239b2aa76084ac8fcc, type: 3}
-  m_PrefabInstance: {fileID: 4705094450294505918}
-  m_PrefabAsset: {fileID: 0}
---- !u!95 &237803274671480288
-Animator:
-  serializedVersion: 7
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2480280935358226677}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 110d167fe382e423da0153f00aa588f1, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_AnimatePhysics: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
 --- !u!1001 &5153946053414538957
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -385,18 +249,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 3910410132426081226}
     m_Modifications:
-    - target: {fileID: 1510892163242542389, guid: c1fae1ba099514fb19db7d0fd36f783f, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1510892163242542389, guid: c1fae1ba099514fb19db7d0fd36f783f, type: 3}
-      propertyPath: m_LocalScale.y
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1510892163242542389, guid: c1fae1ba099514fb19db7d0fd36f783f, type: 3}
-      propertyPath: m_LocalScale.z
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 1510892163242542389, guid: c1fae1ba099514fb19db7d0fd36f783f, type: 3}
       propertyPath: m_LocalPosition.x
       value: 12
@@ -437,58 +289,20 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1510892163242542389, guid: c1fae1ba099514fb19db7d0fd36f783f, type: 3}
-      propertyPath: m_ConstrainProportionsScale
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 2025842262885799362, guid: c1fae1ba099514fb19db7d0fd36f783f, type: 3}
       propertyPath: m_Name
       value: Conveyor Endcap_3
       objectReference: {fileID: 0}
-    - target: {fileID: 2025842262885799362, guid: c1fae1ba099514fb19db7d0fd36f783f, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 2025842262885799362, guid: c1fae1ba099514fb19db7d0fd36f783f, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 5130440489654761264}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c1fae1ba099514fb19db7d0fd36f783f, type: 3}
 --- !u!4 &6012792354844609528 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1510892163242542389, guid: c1fae1ba099514fb19db7d0fd36f783f, type: 3}
   m_PrefabInstance: {fileID: 5153946053414538957}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &6600942723266829071 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 2025842262885799362, guid: c1fae1ba099514fb19db7d0fd36f783f, type: 3}
-  m_PrefabInstance: {fileID: 5153946053414538957}
-  m_PrefabAsset: {fileID: 0}
---- !u!95 &5130440489654761264
-Animator:
-  serializedVersion: 7
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6600942723266829071}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 047f466579eae4c1cb2a5e78be10f463, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_AnimatePhysics: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
 --- !u!1001 &6884708620016290456
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -497,18 +311,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 3910410132426081226}
     m_Modifications:
-    - target: {fileID: 1510892163242542389, guid: c1fae1ba099514fb19db7d0fd36f783f, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1510892163242542389, guid: c1fae1ba099514fb19db7d0fd36f783f, type: 3}
-      propertyPath: m_LocalScale.y
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1510892163242542389, guid: c1fae1ba099514fb19db7d0fd36f783f, type: 3}
-      propertyPath: m_LocalScale.z
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 1510892163242542389, guid: c1fae1ba099514fb19db7d0fd36f783f, type: 3}
       propertyPath: m_LocalPosition.x
       value: 12
@@ -549,53 +351,15 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1510892163242542389, guid: c1fae1ba099514fb19db7d0fd36f783f, type: 3}
-      propertyPath: m_ConstrainProportionsScale
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 2025842262885799362, guid: c1fae1ba099514fb19db7d0fd36f783f, type: 3}
       propertyPath: m_Name
       value: Conveyor Endcap_2
       objectReference: {fileID: 0}
-    - target: {fileID: 2025842262885799362, guid: c1fae1ba099514fb19db7d0fd36f783f, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 2025842262885799362, guid: c1fae1ba099514fb19db7d0fd36f783f, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 7703809452883145324}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c1fae1ba099514fb19db7d0fd36f783f, type: 3}
---- !u!1 &4870179885113155418 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 2025842262885799362, guid: c1fae1ba099514fb19db7d0fd36f783f, type: 3}
-  m_PrefabInstance: {fileID: 6884708620016290456}
-  m_PrefabAsset: {fileID: 0}
---- !u!95 &7703809452883145324
-Animator:
-  serializedVersion: 7
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4870179885113155418}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 047f466579eae4c1cb2a5e78be10f463, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_AnimatePhysics: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
 --- !u!4 &5439401024057659309 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1510892163242542389, guid: c1fae1ba099514fb19db7d0fd36f783f, type: 3}
@@ -612,22 +376,6 @@ PrefabInstance:
     - target: {fileID: 652635498295126958, guid: e37a75729b0104c418a94aaf15f0b6df, type: 3}
       propertyPath: m_Name
       value: Conveyor Curve Left_1
-      objectReference: {fileID: 0}
-    - target: {fileID: 652635498295126958, guid: e37a75729b0104c418a94aaf15f0b6df, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2645242056536077422, guid: e37a75729b0104c418a94aaf15f0b6df, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2645242056536077422, guid: e37a75729b0104c418a94aaf15f0b6df, type: 3}
-      propertyPath: m_LocalScale.y
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2645242056536077422, guid: e37a75729b0104c418a94aaf15f0b6df, type: 3}
-      propertyPath: m_LocalScale.z
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2645242056536077422, guid: e37a75729b0104c418a94aaf15f0b6df, type: 3}
       propertyPath: m_LocalPosition.x
@@ -669,18 +417,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: -90
       objectReference: {fileID: 0}
-    - target: {fileID: 2645242056536077422, guid: e37a75729b0104c418a94aaf15f0b6df, type: 3}
-      propertyPath: m_ConstrainProportionsScale
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6356605379601649626, guid: e37a75729b0104c418a94aaf15f0b6df, type: 3}
-      propertyPath: m_FlipX
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6356605379601649626, guid: e37a75729b0104c418a94aaf15f0b6df, type: 3}
-      propertyPath: m_FlipY
-      value: 0
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -702,22 +438,6 @@ PrefabInstance:
     - target: {fileID: 652635498295126958, guid: e37a75729b0104c418a94aaf15f0b6df, type: 3}
       propertyPath: m_Name
       value: Conveyor Curve Left_2
-      objectReference: {fileID: 0}
-    - target: {fileID: 652635498295126958, guid: e37a75729b0104c418a94aaf15f0b6df, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2645242056536077422, guid: e37a75729b0104c418a94aaf15f0b6df, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2645242056536077422, guid: e37a75729b0104c418a94aaf15f0b6df, type: 3}
-      propertyPath: m_LocalScale.y
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2645242056536077422, guid: e37a75729b0104c418a94aaf15f0b6df, type: 3}
-      propertyPath: m_LocalScale.z
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2645242056536077422, guid: e37a75729b0104c418a94aaf15f0b6df, type: 3}
       propertyPath: m_LocalPosition.x
@@ -759,16 +479,8 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: -90
       objectReference: {fileID: 0}
-    - target: {fileID: 2645242056536077422, guid: e37a75729b0104c418a94aaf15f0b6df, type: 3}
-      propertyPath: m_ConstrainProportionsScale
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 6356605379601649626, guid: e37a75729b0104c418a94aaf15f0b6df, type: 3}
       propertyPath: m_FlipX
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6356605379601649626, guid: e37a75729b0104c418a94aaf15f0b6df, type: 3}
-      propertyPath: m_FlipY
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -789,18 +501,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 3910410132426081226}
     m_Modifications:
-    - target: {fileID: 1510892163242542389, guid: c1fae1ba099514fb19db7d0fd36f783f, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1510892163242542389, guid: c1fae1ba099514fb19db7d0fd36f783f, type: 3}
-      propertyPath: m_LocalScale.y
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1510892163242542389, guid: c1fae1ba099514fb19db7d0fd36f783f, type: 3}
-      propertyPath: m_LocalScale.z
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 1510892163242542389, guid: c1fae1ba099514fb19db7d0fd36f783f, type: 3}
       propertyPath: m_LocalPosition.x
       value: 12
@@ -841,53 +541,15 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1510892163242542389, guid: c1fae1ba099514fb19db7d0fd36f783f, type: 3}
-      propertyPath: m_ConstrainProportionsScale
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 2025842262885799362, guid: c1fae1ba099514fb19db7d0fd36f783f, type: 3}
       propertyPath: m_Name
       value: Conveyor Endcap_1
       objectReference: {fileID: 0}
-    - target: {fileID: 2025842262885799362, guid: c1fae1ba099514fb19db7d0fd36f783f, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 2025842262885799362, guid: c1fae1ba099514fb19db7d0fd36f783f, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 3159495457181905066}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c1fae1ba099514fb19db7d0fd36f783f, type: 3}
---- !u!1 &8143555371082596611 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 2025842262885799362, guid: c1fae1ba099514fb19db7d0fd36f783f, type: 3}
-  m_PrefabInstance: {fileID: 7862867928135390401}
-  m_PrefabAsset: {fileID: 0}
---- !u!95 &3159495457181905066
-Animator:
-  serializedVersion: 7
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8143555371082596611}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 047f466579eae4c1cb2a5e78be10f463, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_AnimatePhysics: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
 --- !u!4 &8784623820857938420 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1510892163242542389, guid: c1fae1ba099514fb19db7d0fd36f783f, type: 3}
@@ -901,18 +563,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 3910410132426081226}
     m_Modifications:
-    - target: {fileID: 5113616251171144201, guid: 9f107c971f57b4239b2aa76084ac8fcc, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5113616251171144201, guid: 9f107c971f57b4239b2aa76084ac8fcc, type: 3}
-      propertyPath: m_LocalScale.y
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5113616251171144201, guid: 9f107c971f57b4239b2aa76084ac8fcc, type: 3}
-      propertyPath: m_LocalScale.z
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 5113616251171144201, guid: 9f107c971f57b4239b2aa76084ac8fcc, type: 3}
       propertyPath: m_LocalPosition.x
       value: 7
@@ -953,53 +603,15 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 5113616251171144201, guid: 9f107c971f57b4239b2aa76084ac8fcc, type: 3}
-      propertyPath: m_ConstrainProportionsScale
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 7142814733106946379, guid: 9f107c971f57b4239b2aa76084ac8fcc, type: 3}
       propertyPath: m_Name
       value: Conveyor Straight_3
       objectReference: {fileID: 0}
-    - target: {fileID: 7142814733106946379, guid: 9f107c971f57b4239b2aa76084ac8fcc, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 7142814733106946379, guid: 9f107c971f57b4239b2aa76084ac8fcc, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 7466309202446413963}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9f107c971f57b4239b2aa76084ac8fcc, type: 3}
---- !u!1 &1466709973376114459 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 7142814733106946379, guid: 9f107c971f57b4239b2aa76084ac8fcc, type: 3}
-  m_PrefabInstance: {fileID: 8609383668112113232}
-  m_PrefabAsset: {fileID: 0}
---- !u!95 &7466309202446413963
-Animator:
-  serializedVersion: 7
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1466709973376114459}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 110d167fe382e423da0153f00aa588f1, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_AnimatePhysics: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
 --- !u!4 &3570679643816574041 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5113616251171144201, guid: 9f107c971f57b4239b2aa76084ac8fcc, type: 3}
@@ -1013,18 +625,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 3910410132426081226}
     m_Modifications:
-    - target: {fileID: 5113616251171144201, guid: 9f107c971f57b4239b2aa76084ac8fcc, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5113616251171144201, guid: 9f107c971f57b4239b2aa76084ac8fcc, type: 3}
-      propertyPath: m_LocalScale.y
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5113616251171144201, guid: 9f107c971f57b4239b2aa76084ac8fcc, type: 3}
-      propertyPath: m_LocalScale.z
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 5113616251171144201, guid: 9f107c971f57b4239b2aa76084ac8fcc, type: 3}
       propertyPath: m_LocalPosition.x
       value: 7
@@ -1065,53 +665,15 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 5113616251171144201, guid: 9f107c971f57b4239b2aa76084ac8fcc, type: 3}
-      propertyPath: m_ConstrainProportionsScale
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 7142814733106946379, guid: 9f107c971f57b4239b2aa76084ac8fcc, type: 3}
       propertyPath: m_Name
       value: Conveyor Straight_2
       objectReference: {fileID: 0}
-    - target: {fileID: 7142814733106946379, guid: 9f107c971f57b4239b2aa76084ac8fcc, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 7142814733106946379, guid: 9f107c971f57b4239b2aa76084ac8fcc, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 7179932354661559146}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9f107c971f57b4239b2aa76084ac8fcc, type: 3}
---- !u!1 &2221247401903624254 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 7142814733106946379, guid: 9f107c971f57b4239b2aa76084ac8fcc, type: 3}
-  m_PrefabInstance: {fileID: 9075620323658674549}
-  m_PrefabAsset: {fileID: 0}
---- !u!95 &7179932354661559146
-Animator:
-  serializedVersion: 7
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2221247401903624254}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 110d167fe382e423da0153f00aa588f1, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_AnimatePhysics: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
 --- !u!4 &4252561858399384444 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5113616251171144201, guid: 9f107c971f57b4239b2aa76084ac8fcc, type: 3}
