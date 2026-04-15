@@ -12276,7 +12276,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1941000319
 RectTransform:
   m_ObjectHideFlags: 0
@@ -13241,7 +13241,7 @@ MonoBehaviour:
   truckTemplates:
   - {fileID: 11400000, guid: 46bcf0ef4d2c840568cf5713fc9fe0a9, type: 2}
   totalRounds: 3
-  roundDuration: 5
+  roundDuration: 60
   baseRoundScore: 1000
   timerText: {fileID: 1287932295}
   playerScoreTexts:
