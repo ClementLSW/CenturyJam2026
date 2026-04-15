@@ -2,6 +2,9 @@ using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using TMPro;
+using System.Collections;
+using UnityEngine.SceneManagement;
+
 
 public class GameManager : MonoBehaviour
 {
@@ -19,7 +22,12 @@ public class GameManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI timerText;
     [SerializeField] private TextMeshProUGUI[] playerScoreTexts; // one per player
     [SerializeField] private GameObject finalScorePanel;
-    [SerializeField] private TextMeshProUGUI finalScoreText;
+    [SerializeField] private Animator finalScoreAnimator;
+    private bool canReturnToMenu = false;
+    [SerializeField] private TextMeshProUGUI finalScoreText1;
+    [SerializeField] private TextMeshProUGUI finalScoreText2;
+    [SerializeField] private TextMeshProUGUI finalScoreText3;
+    [SerializeField] private TextMeshProUGUI finalScoreText4;
 
     private int currentRound = 0;
     private float timeRemaining;
@@ -43,6 +51,7 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         finalScorePanel.SetActive(false);
+        canReturnToMenu = false;
 
         // TODO: replace with actual player count from lobby
         playerCount = PlayerInputManager.instance != null
@@ -59,16 +68,24 @@ public class GameManager : MonoBehaviour
                 playerScoreTexts[i].gameObject.SetActive(i < playerCount);
         }
 
+        AudioManager.Instance.PlaySFX(AudioManager.Instance.vanArrive); // pulling this here because it's delayed in rounds 2 and 3? -kl
         StartRound();
     }
 
     void Update()
     {
+        if (canReturnToMenu && Input.GetKeyDown(KeyCode.E))
+        {
+            finalScoreAnimator.Play("ClipboardExit");
+            canReturnToMenu = false;
+            Debug.Log("Returning to menu...");
+            StartCoroutine(MenuReturnDelay());
+        }
+
         if (!roundActive) return;
 
         timeRemaining -= Time.deltaTime;
         UpdateTimerUI();
-
 
         if (timeRemaining <= 13f && !playedTicking)
         {
@@ -88,16 +105,20 @@ public class GameManager : MonoBehaviour
                 AudioManager.Instance.PlaySFX(AudioManager.Instance.timeOut);
             }
 
-            // delay end round slightly
             Invoke(nameof(EndRound), 1f);
             return;
         }
-
 
         if (timeRemaining <= 0f)
         {
             EndRound();
         }
+    }
+
+    public IEnumerator MenuReturnDelay()
+    {
+        yield return new WaitForSeconds(1.5f);
+        SceneManager.LoadScene("MainMenu");
     }
 
     private void StartRound()
@@ -248,6 +269,8 @@ public class GameManager : MonoBehaviour
     private void ShowFinalScores()
     {
         finalScorePanel.SetActive(true);
+        canReturnToMenu = true;
+        finalScoreAnimator.Play("ClipboardEnter");
 
         string result = "Final scores\n\n";
         int winnerIndex = 0;
@@ -259,7 +282,7 @@ public class GameManager : MonoBehaviour
         }
         result += $"\nPlayer {winnerIndex + 1} wins!";
 
-        finalScoreText.text = result;
+        //finalScoreText.text = result;
         AudioManager.Instance.PlaySFX(AudioManager.Instance.payout);
 
         // TODO: restart or return to menu on button press
