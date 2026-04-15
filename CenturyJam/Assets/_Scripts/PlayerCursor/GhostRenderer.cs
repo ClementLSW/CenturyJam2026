@@ -81,4 +81,9 @@ public class GhostRenderer : MonoBehaviour
             ghostActive = false;
         }
     }
+
+    public void SetDependency(GridManager gridManager)
+    {
+        this.gridManager = gridManager;
+    }
 }

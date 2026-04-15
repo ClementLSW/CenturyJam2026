@@ -28,6 +28,12 @@ public class ParcelHandler : MonoBehaviour
     public ParcelData HeldData => heldParcel?.data;
     public int CurrentRotation => currentRotation;
 
+    public void SetDependency(ConveyorManager conveyorManager, GridManager gridManager)
+    {
+        if (this.conveyorManager == null) this.conveyorManager = conveyorManager;
+        if (this.gridManager == null) this.gridManager = gridManager;
+    }
+
     public void HandleInteract()
     {
         if (heldParcel == null)

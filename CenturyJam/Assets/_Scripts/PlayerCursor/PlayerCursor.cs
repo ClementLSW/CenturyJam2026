@@ -85,4 +85,10 @@ public class PlayerCursor : MonoBehaviour
         }
         Debug.Log("Game Paused");
     }
+
+    public void InjectDependencies(ConveyorManager conveyorManager, GridManager gridManager)
+    {
+        parcelHandler.SetDependency(conveyorManager, gridManager);
+        GetComponent<GhostRenderer>().SetDependency(gridManager);
+    }
 }

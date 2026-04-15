@@ -134,7 +134,7 @@ public class PlayerEnrolmentManager : MonoBehaviour
             time -= Time.deltaTime;
             yield return null;
         }
-
+        
         _sceneChangeManager.StartGame();
     }
 
