@@ -133,7 +133,7 @@ public class ParcelHandler : MonoBehaviour
         go.transform.localScale = new(placedParcelScale, placedParcelScale, placedParcelScale);
         heldVisual = go.AddComponent<SpriteRenderer>();
         heldVisual.sprite = wp.data.parcelSprite;
-        heldVisual.color = wp.parcelColor;
+        heldVisual.color = new(wp.parcelColor.r, wp.parcelColor.g, wp.parcelColor.b, 0.5f);
         heldVisual.sortingLayerName = "Held Boxes";
         heldVisual.sortingOrder = GetComponent<PlayerCursor>().PlayerIndex;
     }
@@ -184,6 +184,7 @@ public class ParcelHandler : MonoBehaviour
                 placedSr.color = heldParcel.parcelColor;
                 placedSr.sortingLayerName = "Boxes";
                 _placedParcels.Add(placed);
+                Camera.main.GetComponent<CameraShake>().ImpulseShake();
 
                 gridManager.RegisterPlacedVisual(id, placed);
 

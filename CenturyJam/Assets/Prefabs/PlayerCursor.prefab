@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 3096822358778075966}
   - component: {fileID: 5175159829673951018}
   - component: {fileID: 5406285297928325235}
+  - component: {fileID: 1116825953780686810}
   m_Layer: 0
   m_Name: PlayerCursor
   m_TagString: Player
@@ -83,7 +84,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -2135347643
-  m_SortingLayer: 3
+  m_SortingLayer: 4
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: 2037e78c3a5d57cc79b7a0f82ed57077, type: 3}
@@ -125,7 +126,7 @@ MonoBehaviour:
   gridManager: {fileID: 0}
   pickupRange: 1
   placedParcelScale: 0.65
-  placeEffect: {fileID: 0}
+  placeEffect: {fileID: 5972723565303057941, guid: 3fe9d23d4ae73c54f98d694149a492ee, type: 3}
 --- !u!114 &3096822358778075966
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -287,3 +288,15 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &1116825953780686810
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5530887575852282793}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1d502739535e848b7a66536c287fe06f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GamepadVibrate
