@@ -108,7 +108,7 @@ public class ParcelHandler : MonoBehaviour
 
                 var go = new GameObject("PickedParcel");
                 go.transform.position = transform.position;
-
+                
                 var wp = go.AddComponent<WorldParcel>();
                 wp.data = data;
                 wp.ownerID = originalOwner;
@@ -130,10 +130,12 @@ public class ParcelHandler : MonoBehaviour
 
         var go = new GameObject("HeldVisual");
         go.transform.rotation = Quaternion.Euler(0, 0, -90f * currentRotation);
+        go.transform.localScale = new(placedParcelScale, placedParcelScale, placedParcelScale);
         heldVisual = go.AddComponent<SpriteRenderer>();
         heldVisual.sprite = wp.data.parcelSprite;
         heldVisual.color = wp.parcelColor;
-        heldVisual.sortingOrder = 10;
+        heldVisual.sortingLayerName = "Held Boxes";
+        heldVisual.sortingOrder = GetComponent<PlayerCursor>().PlayerIndex;
     }
 
 
