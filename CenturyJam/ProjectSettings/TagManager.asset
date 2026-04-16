@@ -38,8 +38,14 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: Background
+    uniqueID: 4186828171
+    locked: 0
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Van
+    uniqueID: 3040367869
     locked: 0
   - name: Player Hand
     uniqueID: 2159619653

@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2c15e87e5524d461aace363c03d18961, type: 3}
   m_Name: GlobalVariables
   m_EditorClassIdentifier: Assembly-CSharp::GlobalVariable
-  player1Color: {r: 1, g: 0, b: 0, a: 1}
-  player2Color: {r: 0, g: 1, b: 0, a: 1}
-  player3Color: {r: 0, g: 0, b: 1, a: 1}
-  player4Color: {r: 1, g: 1, b: 0, a: 1}
+  player1Color: {r: 1, g: 0.49019608, b: 0, a: 1}
+  player2Color: {r: 0.49019608, g: 0, b: 1, a: 1}
+  player3Color: {r: 0, g: 0.49019608, b: 1, a: 1}
+  player4Color: {r: 1, g: 0, b: 0.49019608, a: 1}

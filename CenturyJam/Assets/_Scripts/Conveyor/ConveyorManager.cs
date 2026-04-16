@@ -5,8 +5,7 @@ public class ConveyorManager : MonoBehaviour
 {
     public PlayerConveyorGroup[] players;
 
-    private static readonly Color[] PlayerColors =
-        { Color.red, Color.blue, Color.green, Color.yellow };
+    [SerializeField] private GlobalVariable globalVariable;
 
     void Awake()
     {
@@ -27,7 +26,21 @@ public class ConveyorManager : MonoBehaviour
             if (i < playerCount)
             {
                 players[i].gameObject.SetActive(true);
-                players[i].Initialize(i, PlayerColors[i]);
+                switch (i)
+                {
+                    case 0:
+                        players[i].Initialize(i, globalVariable.player1Color);
+                        break;
+                    case 1:
+                        players[i].Initialize(i, globalVariable.player2Color);
+                        break;
+                    case 2:
+                        players[i].Initialize(i, globalVariable.player3Color);
+                        break;
+                    case 3:
+                        players[i].Initialize(i, globalVariable.player4Color);
+                        break;
+                }
             }
             else
             {

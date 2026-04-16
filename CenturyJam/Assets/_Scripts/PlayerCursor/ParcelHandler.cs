@@ -1,11 +1,13 @@
 using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine.Rendering.Universal;
 
 public class ParcelHandler : MonoBehaviour
 {
     [SerializeField] private ConveyorManager conveyorManager;
     [SerializeField] private GridManager gridManager;
     [SerializeField] private float pickupRange = 1f;
+    [SerializeField] private float placedParcelScale;
 
     private PlayerCursor cursor;
     private GhostRenderer ghostRenderer;
@@ -168,6 +170,7 @@ public class ParcelHandler : MonoBehaviour
                 var placed = new GameObject($"PlacedParcel_{id}");
                 placed.transform.position = center;
                 placed.transform.rotation = Quaternion.Euler(0, 0, -90f * currentRotation);
+                placed.transform.localScale = new(placedParcelScale, placedParcelScale, placedParcelScale);
                 var placedSr = placed.AddComponent<SpriteRenderer>();
                 placedSr.sprite = heldParcel.data.parcelSprite;
                 placedSr.color = heldParcel.parcelColor;

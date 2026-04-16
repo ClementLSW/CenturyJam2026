@@ -301,7 +301,8 @@ public class GridManager : MonoBehaviour
 
                 var sr = go.AddComponent<SpriteRenderer>();
                 sr.sprite = cellSprite;
-
+                sr.sortingLayerName = "Van";
+                sr.sortingOrder = 1;
                 cellRenderers[x, y] = sr;
             }
         }

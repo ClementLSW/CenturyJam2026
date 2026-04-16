@@ -32,7 +32,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
+  m_LocalScale: {x: 0.4, y: 0.4, z: 0.4}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 0}
@@ -124,6 +124,8 @@ MonoBehaviour:
   conveyorManager: {fileID: 0}
   gridManager: {fileID: 0}
   pickupRange: 1
+  placedParcelScale: 0.65
+  placeEffect: {fileID: 0}
 --- !u!114 &3096822358778075966
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -136,7 +138,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 990fca3d2edae4b80a8c93ff88143ea0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GhostRenderer
-  ghostParcelPrefab: {fileID: 6154891947185514472, guid: e6b20e20de54f446d9ca14f78139dbff, type: 3}
   gridManager: {fileID: 0}
 --- !u!114 &5175159829673951018
 MonoBehaviour:
