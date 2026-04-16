@@ -9,6 +9,7 @@ public class CutsceneTransition : MonoBehaviour
 
     private void Update()
     {
+        if (Input.GetKeyDown(KeyCode.Space)) SceneManager.LoadScene("MainMenu");
         if (cutscenePlayer.frame >= (long)(cutscenePlayer.frameCount - 1))
         {
             Debug.Log("Video has finished playing!");

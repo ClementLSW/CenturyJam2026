@@ -121,6 +121,10 @@ public class GameManager : MonoBehaviour
     public IEnumerator MenuReturnDelay()
     {
         yield return new WaitForSeconds(1.5f);
+        foreach (var player in GameObject.FindGameObjectsWithTag("Player"))
+        {
+            Destroy(player);
+        }
         SceneManager.LoadScene("MainMenu");
     }
 
