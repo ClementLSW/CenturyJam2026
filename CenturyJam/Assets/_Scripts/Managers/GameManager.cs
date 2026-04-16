@@ -164,10 +164,8 @@ public class GameManager : MonoBehaviour
         foreach (var handler in FindObjectsByType<ParcelHandler>(FindObjectsSortMode.None)) handler.CleanupHeld();
 
         foreach (var player in GameObject.FindGameObjectsWithTag("Player"))
-        {
             player.GetComponent<ParcelHandler>().ClearBoardParcels();
-        }
-        
+
         if (currentRound >= totalRounds)
             ShowFinalScores();
         else
@@ -296,10 +294,10 @@ public class GameManager : MonoBehaviour
         result += $"\nPlayer {winnerIndex + 1} wins!";
 
         //finalScoreText.text = result;
-        finalScoreText1.text = $"Player 1: {totalScores[0]}";
-        finalScoreText2.text = $"Player 2: {totalScores[1]}";
-        finalScoreText3.text = $"Player 3: {totalScores[2]}";
-        finalScoreText4.text = $"Player 4: {totalScores[3]}";
+        if (totalScores.Length > 0) finalScoreText1.text = $"Player 1: {totalScores[0]}";
+        if (totalScores.Length > 1) finalScoreText2.text = $"Player 2: {totalScores[1]}";
+        if (totalScores.Length > 2) finalScoreText3.text = $"Player 3: {totalScores[2]}";
+        if (totalScores.Length > 3) finalScoreText4.text = $"Player 4: {totalScores[3]}";
         AudioManager.Instance.PlaySFX(AudioManager.Instance.payout);
 
         // TODO: restart or return to menu on button press
@@ -331,10 +329,10 @@ public class GameManager : MonoBehaviour
                         playerScoreTexts[i].color = globalVariable.player2Color;
                         break;
                     case 2:
-                        playerScoreTexts[i].color = globalVariable.player3Color; 
+                        playerScoreTexts[i].color = globalVariable.player3Color;
                         break;
                     case 3:
-                        playerScoreTexts[i].color = globalVariable.player4Color; 
+                        playerScoreTexts[i].color = globalVariable.player4Color;
                         break;
                 }
             }
