@@ -209,7 +209,21 @@ public class ParcelHandler : MonoBehaviour
 
     void TryDrop()
     {
-        //Write code to return specifically to conveyor
+        List<ConveyorBelt> belts = conveyorManager.GetBelts(cursor.PlayerIndex);
+
+        foreach (var belt in belts)
+        {
+            if (belt.ReturnParcel(heldParcel))
+            {
+                heldParcel = null;
+                if (heldVisual != null) Destroy(heldVisual.gameObject);
+                heldVisual = null;
+                currentRotation = 0;
+                return;
+            }
+        }
+
+        Debug.Log("No available belt to return parcel to");
     }
 
     void Update()
