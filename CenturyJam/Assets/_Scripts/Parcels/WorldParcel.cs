@@ -18,14 +18,17 @@ public class WorldParcel : MonoBehaviour
         ConveyorBelt belt,
         ParcelData parcelData,
         Transform[] path,
-        float moveSpeed)
+        float moveSpeed,
+        int startIndex = 0)
     {
         sourceBelt = belt;
         data = parcelData;
         waypoints = path;
         speed = moveSpeed;
+        currentIndex = startIndex;
+        isInteractable = startIndex >= path.Length;
 
-        transform.position = waypoints[0].position;
+        transform.position = waypoints[Mathf.Clamp(startIndex, 0, path.Length - 1)].position;
     }
 
     void Update()

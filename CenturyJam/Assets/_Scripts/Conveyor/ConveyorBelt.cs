@@ -105,7 +105,7 @@ public class ConveyorBelt : MonoBehaviour
     {
         if (currentParcel != null) return false;
 
-        parcel.Initialize(this, parcel.data, waypoints, moveSpeed);
+        parcel.Initialize(this, parcel.data, waypoints, moveSpeed, waypoints.Length);
         parcel.gameObject.SetActive(true);
         currentParcel = parcel;
         return true;
