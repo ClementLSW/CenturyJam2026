@@ -21,8 +21,14 @@ public class GridManager : MonoBehaviour
     public int Width => width;
     public int Height => height;
 
-    private Dictionary<int, ParcelData> parcelRegistry = new Dictionary<int, ParcelData>();
-    private Dictionary<int, Color> parcelColorRegistry = new Dictionary<int, Color>();
+    private struct PlacedParcelInfo
+    {
+        public ParcelData data;
+        public Color color;
+        public int rotation;
+    }
+
+    private Dictionary<int, PlacedParcelInfo> parcelRegistry = new();
     private Dictionary<int, GameObject> placedVisuals = new Dictionary<int, GameObject>();
 
     private SpriteRenderer[,] cellRenderers;
@@ -216,8 +222,7 @@ public class GridManager : MonoBehaviour
             grid[cell.x, cell.y].parcelID = parcelId;
         }
 
-        parcelRegistry[parcelId] = data;
-        parcelColorRegistry[parcelId] = parcelColor;
+        parcelRegistry[parcelId] = new PlacedParcelInfo { data = data, color = parcelColor, rotation = rotation };
         RefreshVisuals();
 
         return parcelId;
@@ -241,7 +246,6 @@ public class GridManager : MonoBehaviour
         }
 
         parcelRegistry.Remove(parcelId);
-        parcelColorRegistry.Remove(parcelId);
         RefreshVisuals();
     }
 
@@ -272,7 +276,7 @@ public class GridManager : MonoBehaviour
         int id = GetParcelIdAt(gridPos);
         if (id == -1) return null;
 
-        return parcelRegistry.ContainsKey(id) ? parcelRegistry[id] : null;
+        return parcelRegistry.ContainsKey(id) ? parcelRegistry[id].data : null;
     }
 
     public Color GetParcelColorAt(Vector2Int gridPos)
@@ -280,7 +284,15 @@ public class GridManager : MonoBehaviour
         int id = GetParcelIdAt(gridPos);
         if (id == -1) return Color.white;
 
-        return parcelColorRegistry.ContainsKey(id) ? parcelColorRegistry[id] : Color.white;
+        return parcelRegistry.ContainsKey(id) ? parcelRegistry[id].color : Color.white;
+    }
+
+    public int GetParcelRotationAt(Vector2Int gridPos)
+    {
+        int id = GetParcelIdAt(gridPos);
+        if (id == -1) return 0;
+
+        return parcelRegistry.ContainsKey(id) ? parcelRegistry[id].rotation : 0;
     }
 
     private bool InBounds(Vector2Int pos)

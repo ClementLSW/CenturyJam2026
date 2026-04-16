@@ -102,30 +102,31 @@ public class ParcelHandler : MonoBehaviour
                 CellData cell = gridManager.GetCell(gridPos);
                 ParcelData data = gridManager.GetParcelDataAt(gridPos);
                 Color color = gridManager.GetParcelColorAt(gridPos);
+                int storedRotation = gridManager.GetParcelRotationAt(gridPos);
                 int originalOwner = cell.ownerID;
 
                 gridManager.RemoveParcel(parcelId);
 
                 var go = new GameObject("PickedParcel");
                 go.transform.position = transform.position;
-                
+
                 var wp = go.AddComponent<WorldParcel>();
                 wp.data = data;
                 wp.ownerID = originalOwner;
                 wp.parcelID = parcelId;
                 wp.parcelColor = color;
 
-                PickUp(wp);
+                PickUp(wp, storedRotation);
                 return;
             }
         }
     }
 
-    private void PickUp(WorldParcel wp)
+    private void PickUp(WorldParcel wp, int rotation = 0)
     {
         heldParcel = wp;
         heldParcel.gameObject.SetActive(false);
-        currentRotation = 0;
+        currentRotation = rotation;
         AudioManager.Instance.PlaySFX(AudioManager.Instance.boxPickup);
 
         var go = new GameObject("HeldVisual");
