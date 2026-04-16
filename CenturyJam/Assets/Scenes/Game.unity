@@ -377,7 +377,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GridManager
   cellSize: 1
-  template: {fileID: 11400000, guid: 46bcf0ef4d2c840568cf5713fc9fe0a9, type: 2}
+  templateGroup: {fileID: 11400000, guid: 9f2445dd5c9363249bf604add9bd5c79, type: 2}
   cellSprite: {fileID: 7482667652216324306, guid: 48e93eef0688c4a259cb0eddcd8661f7, type: 3}
   fadeDuration: 1.5
   rippleSpeed: 0.08
@@ -12346,8 +12346,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::GameManager
   gridManager: {fileID: 72913138}
   conveyorManager: {fileID: 1421678654}
-  truckTemplates:
-  - {fileID: 11400000, guid: 46bcf0ef4d2c840568cf5713fc9fe0a9, type: 2}
+  truckTemplateGroup: {fileID: 11400000, guid: 9f2445dd5c9363249bf604add9bd5c79, type: 2}
   totalRounds: 3
   roundDuration: 60
   baseRoundScore: 1000

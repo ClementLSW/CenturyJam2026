@@ -4,6 +4,7 @@ using UnityEngine.InputSystem;
 using TMPro;
 using System.Collections;
 using UnityEngine.SceneManagement;
+using System.Linq;
 
 
 public class GameManager : MonoBehaviour
@@ -11,7 +12,7 @@ public class GameManager : MonoBehaviour
     [Header("References")]
     [SerializeField] private GridManager gridManager;
     [SerializeField] private ConveyorManager conveyorManager;
-    [SerializeField] private TruckTemplate[] truckTemplates;
+    [SerializeField] private TruckTemplateGroup truckTemplateGroup;
 
     [Header("Round Settings")]
     [SerializeField] private int totalRounds = 3;
@@ -127,10 +128,19 @@ public class GameManager : MonoBehaviour
         playedTicking = false;
         playedVanLeave = false;
 
+        if (truckTemplateGroup == null)
+        {
+            Debug.LogError("TruckTemplateGroup not assigned in Inspector!");
+            return;
+        }
+
         // Pick a truck template
-        int templateIndex = (currentRound - 1) % truckTemplates.Length;
-        //gridManager.LoadTemplate(truckTemplates[templateIndex]);
-        gridManager.FadeOutAndReload(truckTemplates[templateIndex]);
+        //int groupIndex = (currentRound - 1) % truckTemplateGroup.GetCount();
+        //int groupIndex = currentRound;
+
+        TruckTemplate template = truckTemplateGroup.GetRandomTemplate();
+
+        gridManager.LoadTemplate(template);
         Van.GetComponent<SpriteRenderer>().sprite = UnityEngine.Random.Range(0, 2) == 0 ? vanSpriteA : vanSpriteB;
 
         conveyorManager.StartRound();
@@ -174,6 +184,12 @@ public class GameManager : MonoBehaviour
 
     private void TallyRoundScores()
     {
+        if (gridManager.Width == 0 || gridManager.Height == 0)
+        {
+            Debug.LogWarning("Grid not ready for scoring yet!");
+            return;
+        }
+
         int totalFilledCells = 0;
         int player1Cells = 0, player2Cells = 0, player3Cells = 0, player4Cells = 0;
         for (int x = 0; x < gridManager.Width; x++)
@@ -211,8 +227,15 @@ public class GameManager : MonoBehaviour
         }
         //Divide by 0 check, if totalFilledCells is 0 just break, because there's no point calculating. No one did shit here
         if (totalFilledCells <= 0) return;
-        
+
         //Calculate Penalty
+
+        if (gridManager.Width == 0 || gridManager.Height == 0)
+        {
+            Debug.LogWarning("Grid not initialized properly!");
+            return;
+        }
+
         var totalGridSquares = gridManager.Height * gridManager.Width;
         var buffer = Mathf.FloorToInt(0.1f * totalGridSquares);
         var excessEmpty = Math.Max(totalGridSquares - totalFilledCells - buffer, 0);

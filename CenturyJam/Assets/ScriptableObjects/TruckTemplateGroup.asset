@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c6e6879b910ca934ba23438e1e1720aa, type: 3}
+  m_Name: TruckTemplateGroup
+  m_EditorClassIdentifier: Assembly-CSharp::TruckTemplateGroup
+  templates:
+  - {fileID: 11400000, guid: 46bcf0ef4d2c840568cf5713fc9fe0a9, type: 2}
+  - {fileID: 11400000, guid: b799cc969032f6e41b97d3673f9c6bbc, type: 2}
+  - {fileID: 11400000, guid: e7574a1bd2671524ea0042b672c26bf1, type: 2}
+  - {fileID: 11400000, guid: f6b5af6c90bd6254da3cc1828c3faec6, type: 2}
+  - {fileID: 11400000, guid: 1bd66f5bbaa259c448842a9c3d242623, type: 2}
+  - {fileID: 11400000, guid: 2b5c4e84f194e2a42940af9101bdf8b6, type: 2}
+  - {fileID: 11400000, guid: 6013de5a8ee5eb244845c2ec2cf3ee78, type: 2}
+  - {fileID: 11400000, guid: ca89de8cf426fe7449da864beb8c0323, type: 2}
+  - {fileID: 11400000, guid: aa3c38ff930c031409bdec60c17a1749, type: 2}
+  - {fileID: 11400000, guid: e669a2c53b69de544aad38fd8f801034, type: 2}

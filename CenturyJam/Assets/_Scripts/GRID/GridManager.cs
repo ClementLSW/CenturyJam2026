@@ -6,7 +6,7 @@ public class GridManager : MonoBehaviour
 {
     [Header("Grid Config")]
     [SerializeField] private float cellSize = 1f;
-    [SerializeField] private TruckTemplate template;
+    [SerializeField] private TruckTemplateGroup templateGroup;
     [SerializeField] private Sprite cellSprite;
 
     [Header("Fade Settings")]
@@ -37,6 +37,20 @@ public class GridManager : MonoBehaviour
     private int nextparcelId = 1;
 
 
+    public void LoadRandomTemplate()
+    {
+        if (templateGroup == null)
+        {
+            Debug.LogError("Template group not assigned!");
+            return;
+        }
+
+        TruckTemplate t = templateGroup.GetRandomTemplate();
+        if (t != null)
+        {
+            LoadTemplate(t);
+        }
+    }
     public void LoadTemplate(TruckTemplate t)
     {
         width = t.width;
@@ -56,16 +70,30 @@ public class GridManager : MonoBehaviour
         StartCoroutine(RippleFade(0f, 1f));
     }
 
-    public void FadeOutAndReload(TruckTemplate t)
+    //public void FadeOutAndReload(TruckTemplate t)
+    //{
+    //    StartCoroutine(FadeOutThenReload(t));
+    //}
+
+    //private IEnumerator FadeOutThenReload(TruckTemplate t)
+    //{
+    //    yield return new WaitForSeconds(0.5f);
+    //    yield return StartCoroutine(RippleFade(1f, 0f));
+    //    LoadTemplate(t);
+    //}
+
+
+    public void FadeOutAndReloadRandom()
     {
-        StartCoroutine(FadeOutThenReload(t));
+        StartCoroutine(FadeOutThenReloadRandom());
     }
 
-    private IEnumerator FadeOutThenReload(TruckTemplate t)
+    private IEnumerator FadeOutThenReloadRandom()
     {
         yield return new WaitForSeconds(0.5f);
         yield return StartCoroutine(RippleFade(1f, 0f));
-        LoadTemplate(t);
+
+        LoadRandomTemplate();
     }
 
     private IEnumerator RippleFade(float startAlpha, float endAlpha)
@@ -106,6 +134,7 @@ public class GridManager : MonoBehaviour
 
         SetGridAlpha(endAlpha);
     }
+
 
     private void SetGridAlpha(float alpha)
     {
