@@ -8,7 +8,7 @@ public class CameraShake : MonoBehaviour
     [SerializeField] private float frequency;
     private float _initialCameraScale;
 
-    private float _strength = 1;
+    private float _strength = 0;
     private float seed;
 
     private void Awake()
