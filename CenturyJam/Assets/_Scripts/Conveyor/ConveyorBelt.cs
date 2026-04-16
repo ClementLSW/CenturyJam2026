@@ -101,6 +101,16 @@ public class ConveyorBelt : MonoBehaviour
         return settings.parcelPool[^1].parcel;
     }
 
+    public bool ReturnParcel(WorldParcel parcel)
+    {
+        if (currentParcel != null) return false;
+
+        parcel.Initialize(this, parcel.data, waypoints, moveSpeed);
+        parcel.gameObject.SetActive(true);
+        currentParcel = parcel;
+        return true;
+    }
+
     public WorldParcel GetReadyParcel()
     {
         if (currentParcel != null && currentParcel.IsInteractable())
