@@ -29,6 +29,14 @@ public class PlayerCursor : MonoBehaviour
         if (ctx.performed && StateManager.Instance.GetCurrentState() == StateManager.GameState.GAME) parcelHandler.HandleInteract();
     }
 
+    public void OnBack(InputAction.CallbackContext ctx)
+    {
+        if (StateManager.Instance == null) return;
+        if (ctx.performed && StateManager.Instance.GetCurrentState() == StateManager.GameState.MAINMENU) Destroy(gameObject);
+        if (parcelHandler == null) return;
+        if (ctx.performed && StateManager.Instance.GetCurrentState() == StateManager.GameState.GAME) parcelHandler.HandleBack();
+    }
+
     public void OnRotateCW(InputAction.CallbackContext ctx)
     {
         if (StateManager.Instance == null) return;

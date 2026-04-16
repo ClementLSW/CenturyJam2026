@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 
@@ -18,6 +19,12 @@ public class ConveyorMenuVisual : MonoBehaviour
     private void Start()
     {
         transform.position = pos0;
+    }
+
+    private void OnDestroy()
+    {
+        if (_moveCoroutine != null) StopCoroutine(_moveCoroutine);
+        _moveCoroutine = null;
     }
 
     public void AnimatePosition(int startPosition, int finalPosition)

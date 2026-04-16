@@ -17,7 +17,7 @@ GameObject:
   - component: {fileID: 5406285297928325235}
   m_Layer: 0
   m_Name: PlayerCursor
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -83,7 +83,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -2135347643
-  m_SortingLayer: 1
+  m_SortingLayer: 3
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: 2037e78c3a5d57cc79b7a0f82ed57077, type: 3}
@@ -244,6 +244,22 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: 4b3cfac9-ef77-494b-92f3-e617e1feabdc
     m_ActionName: 'Player/Pause[/Keyboard/escape]'
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 7643629403878634832}
+        m_TargetAssemblyTypeName: PlayerCursor, Assembly-CSharp
+        m_MethodName: OnBack
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 961201dc-96d2-472d-859f-65acaab3fcc6
+    m_ActionName: 'Player/Back[/Keyboard/backspace,/XboxGamepadMacOSWireless/buttonEast]'
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player

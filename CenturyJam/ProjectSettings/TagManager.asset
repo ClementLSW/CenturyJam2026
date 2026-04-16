@@ -47,6 +47,9 @@ TagManager:
   - name: Van
     uniqueID: 3040367869
     locked: 0
+  - name: Boxes
+    uniqueID: 1732925975
+    locked: 0
   - name: Player Hand
     uniqueID: 2159619653
     locked: 0

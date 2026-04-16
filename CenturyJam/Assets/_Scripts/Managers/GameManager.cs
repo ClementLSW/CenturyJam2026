@@ -1,55 +1,54 @@
 using System;
+using System.Collections;
+using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using TMPro;
-using System.Collections;
 using UnityEngine.SceneManagement;
-using System.Linq;
-
+using Random = UnityEngine.Random;
 
 public class GameManager : MonoBehaviour
 {
-    [Header("References")]
-    [SerializeField] private GridManager gridManager;
+    [Header("References")] [SerializeField]
+    private GridManager gridManager;
+
     [SerializeField] private ConveyorManager conveyorManager;
     [SerializeField] private TruckTemplateGroup truckTemplateGroup;
 
-    [Header("Round Settings")]
-    [SerializeField] private int totalRounds = 3;
+    [Header("Round Settings")] [SerializeField]
+    private int totalRounds = 3;
+
     [SerializeField] private float roundDuration = 60f;
     [SerializeField] private int baseRoundScore = 1000;
 
-    [Header("UI")]
-    [SerializeField] private TextMeshProUGUI timerText;
+    [Header("UI")] [SerializeField] private TextMeshProUGUI timerText;
+
     [SerializeField] private TextMeshProUGUI[] playerScoreTexts; // one per player
     [SerializeField] private GameObject finalScorePanel;
     [SerializeField] private Animator finalScoreAnimator;
-    private bool canReturnToMenu = false;
     [SerializeField] private TextMeshProUGUI finalScoreText1;
     [SerializeField] private TextMeshProUGUI finalScoreText2;
     [SerializeField] private TextMeshProUGUI finalScoreText3;
     [SerializeField] private TextMeshProUGUI finalScoreText4;
-
-    private int currentRound = 0;
-    private float timeRemaining;
-    private bool roundActive = false;
-    private bool playedTicking = false;
-    private bool playedTimeOut = false;
-    private bool playedVanLeave = false;
-    private int[] totalScores;
-    private int playerCount;
+    [SerializeField] private GlobalVariable globalVariable;
 
     public GameObject Van;
     [SerializeField] private Sprite vanSpriteA;
     [SerializeField] private Sprite vanSpriteB;
     public Animator vanAnimator;
     public GameObject VanExhaust;
+    private bool canReturnToMenu;
 
+    private int currentRound;
+    private bool playedTicking;
+    private bool playedTimeOut;
+    private bool playedVanLeave;
+    private int playerCount;
+    private float timeRemaining;
+    private int[] totalScores;
 
-    private static readonly Color[] PlayerColors =
-        { Color.red, Color.blue, Color.green, Color.yellow };
+    public bool IsRoundActive { get; private set; }
 
-    void Start()
+    private void Start()
     {
         finalScorePanel.SetActive(false);
         canReturnToMenu = false;
@@ -63,17 +62,16 @@ public class GameManager : MonoBehaviour
         conveyorManager.SetupBelts(playerCount);
 
         // Hide score texts for inactive players
-        for (int i = 0; i < playerScoreTexts.Length; i++)
-        {
+        for (var i = 0; i < playerScoreTexts.Length; i++)
             if (playerScoreTexts[i] != null)
                 playerScoreTexts[i].gameObject.SetActive(i < playerCount);
-        }
 
-        AudioManager.Instance.PlaySFX(AudioManager.Instance.vanArrive); // pulling this here because it's delayed in rounds 2 and 3? -kl
+        AudioManager.Instance.PlaySFX(AudioManager.Instance
+            .vanArrive); // pulling this here because it's delayed in rounds 2 and 3? -kl
         StartRound();
     }
 
-    void Update()
+    private void Update()
     {
         if (canReturnToMenu && Input.GetKeyDown(KeyCode.E))
         {
@@ -83,7 +81,7 @@ public class GameManager : MonoBehaviour
             StartCoroutine(MenuReturnDelay());
         }
 
-        if (!roundActive) return;
+        if (!IsRoundActive) return;
 
         timeRemaining -= Time.deltaTime;
         UpdateTimerUI();
@@ -110,10 +108,7 @@ public class GameManager : MonoBehaviour
             return;
         }
 
-        if (timeRemaining <= 0f)
-        {
-            EndRound();
-        }
+        if (timeRemaining <= 0f) EndRound();
     }
 
     public IEnumerator MenuReturnDelay()
@@ -138,10 +133,10 @@ public class GameManager : MonoBehaviour
         //int groupIndex = (currentRound - 1) % truckTemplateGroup.GetCount();
         //int groupIndex = currentRound;
 
-        TruckTemplate template = truckTemplateGroup.GetRandomTemplate();
+        var template = truckTemplateGroup.GetRandomTemplate();
 
         gridManager.LoadTemplate(template);
-        Van.GetComponent<SpriteRenderer>().sprite = UnityEngine.Random.Range(0, 2) == 0 ? vanSpriteA : vanSpriteB;
+        Van.GetComponent<SpriteRenderer>().sprite = Random.Range(0, 2) == 0 ? vanSpriteA : vanSpriteB;
 
         conveyorManager.StartRound();
         AudioManager.Instance.PlaySFX(AudioManager.Instance.vanArrive);
@@ -149,7 +144,7 @@ public class GameManager : MonoBehaviour
         VanExhaust.SetActive(false);
 
         timeRemaining = roundDuration;
-        roundActive = true;
+        IsRoundActive = true;
 
         UpdateTimerUI();
         UpdateScoreUI();
@@ -158,7 +153,7 @@ public class GameManager : MonoBehaviour
     private void EndRound()
     {
         CancelInvoke(nameof(EndRound));
-        roundActive = false;
+        IsRoundActive = false;
         vanAnimator.Play("VanLeave");
 
         // Tally scores from grid
@@ -166,20 +161,18 @@ public class GameManager : MonoBehaviour
         UpdateScoreUI();
 
         // Force drop any held parcels
-        foreach (var handler in FindObjectsByType<ParcelHandler>(FindObjectsSortMode.None))
-        {
-            handler.CleanupHeld();
-        }
+        foreach (var handler in FindObjectsByType<ParcelHandler>(FindObjectsSortMode.None)) handler.CleanupHeld();
 
-        if (currentRound >= totalRounds)
+        foreach (var player in GameObject.FindGameObjectsWithTag("Player"))
         {
-            ShowFinalScores();
+            player.GetComponent<ParcelHandler>().ClearBoardParcels();
         }
+        
+        if (currentRound >= totalRounds)
+            ShowFinalScores();
         else
-        {
             // Brief delay then next round
             Invoke(nameof(StartRound), 2f);
-        }
     }
 
     private void TallyRoundScores()
@@ -190,41 +183,38 @@ public class GameManager : MonoBehaviour
             return;
         }
 
-        int totalFilledCells = 0;
+        var totalFilledCells = 0;
         int player1Cells = 0, player2Cells = 0, player3Cells = 0, player4Cells = 0;
-        for (int x = 0; x < gridManager.Width; x++)
+        for (var x = 0; x < gridManager.Width; x++)
+        for (var y = 0; y < gridManager.Height; y++)
         {
-            for (int y = 0; y < gridManager.Height; y++)
-            {
-                Vector2Int pos = new Vector2Int(x, y);
-                CellData cell = gridManager.GetCell(pos);
+            var pos = new Vector2Int(x, y);
+            var cell = gridManager.GetCell(pos);
 
-                if (cell.state == CellState.Occupied)
-                {
-                    totalFilledCells++;
-                    
-                    ParcelData data = gridManager.GetParcelDataAt(pos);
-                    if (data != null)
+            if (cell.state == CellState.Occupied)
+            {
+                totalFilledCells++;
+
+                var data = gridManager.GetParcelDataAt(pos);
+                if (data != null)
+                    switch (cell.ownerID)
                     {
-                        switch (cell.ownerID)
-                        {
-                            case 0:
-                                player1Cells++;
-                                break;
-                            case 1:
-                                player2Cells++;
-                                break;
-                            case 2:
-                                player3Cells++;
-                                break;
-                            case 3:
-                                player4Cells++;
-                                break;
-                        }
+                        case 0:
+                            player1Cells++;
+                            break;
+                        case 1:
+                            player2Cells++;
+                            break;
+                        case 2:
+                            player3Cells++;
+                            break;
+                        case 3:
+                            player4Cells++;
+                            break;
                     }
-                }
             }
         }
+
         //Divide by 0 check, if totalFilledCells is 0 just break, because there's no point calculating. No one did shit here
         if (totalFilledCells <= 0) return;
 
@@ -239,13 +229,13 @@ public class GameManager : MonoBehaviour
         var totalGridSquares = gridManager.Height * gridManager.Width;
         var buffer = Mathf.FloorToInt(0.1f * totalGridSquares);
         var excessEmpty = Math.Max(totalGridSquares - totalFilledCells - buffer, 0);
-        var penalty = ((float)excessEmpty / (float)totalGridSquares);
+        var penalty = excessEmpty / (float)totalGridSquares;
         var adjustedBaseScore = baseRoundScore * (1f - penalty);
 
         //Calculate individual color-ratio
         int[] playerCells = { player1Cells, player2Cells, player3Cells, player4Cells };
-        for (int i = 0; i < playerCount; i++)
-            totalScores[i] += Mathf.RoundToInt(adjustedBaseScore * ((float)playerCells[i] / (float)totalFilledCells));
+        for (var i = 0; i < playerCount; i++)
+            totalScores[i] += Mathf.RoundToInt(adjustedBaseScore * (playerCells[i] / (float)totalFilledCells));
 
         //Outdated
         /*for (int x = 0; x < gridManager.Width; x++)
@@ -277,15 +267,14 @@ public class GameManager : MonoBehaviour
     {
         // Check if there's any cell with the same parcelId
         // that comes before this one in scan order
-        for (int x = 0; x < gridManager.Width; x++)
+        for (var x = 0; x < gridManager.Width; x++)
+        for (var y = 0; y < gridManager.Height; y++)
         {
-            for (int y = 0; y < gridManager.Height; y++)
-            {
-                if (x == pos.x && y == pos.y) return true;
-                CellData cell = gridManager.GetCell(new Vector2Int(x, y));
-                if (cell.parcelID == parcelId) return false;
-            }
+            if (x == pos.x && y == pos.y) return true;
+            var cell = gridManager.GetCell(new Vector2Int(x, y));
+            if (cell.parcelID == parcelId) return false;
         }
+
         return true;
     }
 
@@ -295,14 +284,15 @@ public class GameManager : MonoBehaviour
         canReturnToMenu = true;
         finalScoreAnimator.Play("ClipboardEnter");
 
-        string result = "Final scores\n\n";
-        int winnerIndex = 0;
-        for (int i = 0; i < playerCount; i++)
+        var result = "Final scores\n\n";
+        var winnerIndex = 0;
+        for (var i = 0; i < playerCount; i++)
         {
             result += $"Player {i + 1}: {totalScores[i]} pts\n";
             if (totalScores[i] > totalScores[winnerIndex])
                 winnerIndex = i;
         }
+
         result += $"\nPlayer {winnerIndex + 1} wins!";
 
         //finalScoreText.text = result;
@@ -313,7 +303,7 @@ public class GameManager : MonoBehaviour
 
     private void UpdateTimerUI()
     {
-        int seconds = Mathf.CeilToInt(Mathf.Max(0, timeRemaining));
+        var seconds = Mathf.CeilToInt(Mathf.Max(0, timeRemaining));
         timerText.text = seconds.ToString();
 
         if (timeRemaining <= 15f)
@@ -324,15 +314,25 @@ public class GameManager : MonoBehaviour
 
     private void UpdateScoreUI()
     {
-        for (int i = 0; i < playerCount; i++)
-        {
+        for (var i = 0; i < playerCount; i++)
             if (i < playerScoreTexts.Length && playerScoreTexts[i] != null)
             {
                 playerScoreTexts[i].text = $"P{i + 1}: {totalScores[i]}";
-                playerScoreTexts[i].color = PlayerColors[i];
+                switch (i)
+                {
+                    case 0:
+                        playerScoreTexts[i].color = globalVariable.player1Color;
+                        break;
+                    case 1:
+                        playerScoreTexts[i].color = globalVariable.player2Color;
+                        break;
+                    case 2:
+                        playerScoreTexts[i].color = globalVariable.player3Color; 
+                        break;
+                    case 3:
+                        playerScoreTexts[i].color = globalVariable.player4Color; 
+                        break;
+                }
             }
-        }
     }
-
-    public bool IsRoundActive => roundActive;
 }

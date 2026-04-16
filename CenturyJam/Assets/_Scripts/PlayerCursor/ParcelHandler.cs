@@ -15,6 +15,7 @@ public class ParcelHandler : MonoBehaviour
     private WorldParcel heldParcel;
     private SpriteRenderer heldVisual;
     private int currentRotation;
+    private List<GameObject> _placedParcels = new();
 
     [SerializeField] private GameObject placeEffect;
 
@@ -42,6 +43,11 @@ public class ParcelHandler : MonoBehaviour
             TryPickUp();
         else
             TryPlace();
+    }
+
+    public void HandleBack()
+    {
+        if (heldParcel != null) TryDrop();
     }
 
     public void HandleRotateCW()
@@ -174,7 +180,8 @@ public class ParcelHandler : MonoBehaviour
                 var placedSr = placed.AddComponent<SpriteRenderer>();
                 placedSr.sprite = heldParcel.data.parcelSprite;
                 placedSr.color = heldParcel.parcelColor;
-                placedSr.sortingOrder = 5;
+                placedSr.sortingLayerName = "Boxes";
+                _placedParcels.Add(placed);
 
                 gridManager.RegisterPlacedVisual(id, placed);
 
@@ -198,10 +205,24 @@ public class ParcelHandler : MonoBehaviour
         Debug.Log("Can't place here");
     }
 
+    void TryDrop()
+    {
+        //Write code to return specifically to conveyor
+    }
+
     void Update()
     {
         if (heldVisual != null)
             heldVisual.transform.position = transform.position;
+    }
+
+    public void ClearBoardParcels()
+    {
+        foreach (var parcel in _placedParcels)
+        {
+           Destroy(parcel); 
+        }
+        _placedParcels.Clear();
     }
 
     public void CleanupHeld()
