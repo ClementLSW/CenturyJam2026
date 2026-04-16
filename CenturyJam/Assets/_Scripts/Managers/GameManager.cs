@@ -296,6 +296,10 @@ public class GameManager : MonoBehaviour
         result += $"\nPlayer {winnerIndex + 1} wins!";
 
         //finalScoreText.text = result;
+        finalScoreText1.text = $"Player 1: {totalScores[0]}";
+        finalScoreText2.text = $"Player 2: {totalScores[1]}";
+        finalScoreText3.text = $"Player 3: {totalScores[2]}";
+        finalScoreText4.text = $"Player 4: {totalScores[3]}";
         AudioManager.Instance.PlaySFX(AudioManager.Instance.payout);
 
         // TODO: restart or return to menu on button press
