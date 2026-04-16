@@ -102,8 +102,15 @@ public class GridManager : MonoBehaviour
 
         // Ripple origin (center of grid)
         Vector2 center = new Vector2(width / 2f, height / 2f);
+        
+        float maxDelay = 0f;
+        for (int x = 0; x < width; x++)
+        for (int y = 0; y < height; y++)
+            maxDelay = Mathf.Max(maxDelay, Vector2.Distance(new Vector2(x, y), center) * rippleSpeed);
 
-        while (time < fadeDuration)
+        float totalDuration = fadeDuration + maxDelay;
+
+        while (time < totalDuration)
         {
             float globalT = time / fadeDuration;
 
