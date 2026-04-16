@@ -25,6 +25,7 @@ public class PlayerCursor : MonoBehaviour
     {
         if (StateManager.Instance == null) return;
         if (ctx.performed && StateManager.Instance.GetCurrentState() == StateManager.GameState.MAINMENU) PlayerEnrolmentManager.Instance.TryStartGame();
+        if (ctx.performed && GameManager.Instance != null) GameManager.Instance.TryReturnToMenu();
         if (parcelHandler == null) return;
         if (ctx.performed && StateManager.Instance.GetCurrentState() == StateManager.GameState.GAME) parcelHandler.HandleInteract();
     }

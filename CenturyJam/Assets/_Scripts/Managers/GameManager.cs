@@ -48,6 +48,13 @@ public class GameManager : MonoBehaviour
 
     public bool IsRoundActive { get; private set; }
 
+    public static GameManager Instance { get; private set; }
+
+    private void Awake()
+    {
+        Instance = this;
+    }
+
     private void Start()
     {
         finalScorePanel.SetActive(false);
@@ -73,14 +80,6 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
-        if (canReturnToMenu && Input.GetKeyDown(KeyCode.E))
-        {
-            finalScoreAnimator.Play("ClipboardExit");
-            canReturnToMenu = false;
-            Debug.Log("Returning to menu...");
-            StartCoroutine(MenuReturnDelay());
-        }
-
         if (!IsRoundActive) return;
 
         timeRemaining -= Time.deltaTime;
@@ -109,6 +108,14 @@ public class GameManager : MonoBehaviour
         }
 
         if (timeRemaining <= 0f) EndRound();
+    }
+
+    public void TryReturnToMenu()
+    {
+        if (!canReturnToMenu) return;
+        finalScoreAnimator.Play("ClipboardExit");
+        canReturnToMenu = false;
+        StartCoroutine(MenuReturnDelay());
     }
 
     public IEnumerator MenuReturnDelay()
